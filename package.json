@@ -1,11 +1,20 @@
 {
   "name": "create-tsdev",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
   "scripts": {
     "test": "ava",
-    "cli": "node ./index.js"
+    "cli": "node ./index.js",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist build",
+    "ts-node": "ts-node",
+    "docs": "typedoc --entryPoints src/main.ts",
+    "build-all": "npm run clean && npm run build && npm run esbuild-node",
+    "esbuild-node": "esbuild src/cli.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/cli.js",
+    "esbuild-node:dev": "esbuild src/cli.ts --bundle --sourcemap=external --outfile=dist/cli.js",
+    "esbuild-node:watch": "esbuild src/cli.ts --bundle --watch --sourcemap=external --outfile=dist/cli.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +30,29 @@
   "license": "MIT",
   "bin": {
     "create-tsdev": "./index.js"
+  },
+  "devDependencies": {
+    "@ava/typescript": "^1.1.1",
+    "@types/fs-extra": "^9.0.11",
+    "@types/node": "^15.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "ava": "^3.15.0",
+    "esbuild": "^0.12.0",
+    "eslint": "^7.26.0",
+    "ts-node": "^9.1.1",
+    "typedoc": "^0.20.36",
+    "typescript": "^4.2.4"
+  },
+  "ava": {
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "dependencies": {
+    "fs-extra": "^10.0.0"
   }
 }

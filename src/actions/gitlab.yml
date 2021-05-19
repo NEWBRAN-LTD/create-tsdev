@@ -1,0 +1,16 @@
+# .gitlab-ci.yml
+image: node:12
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - test
+
+lint-and-test:
+  stage: test
+  script:
+    - npm install
+    - npm run test
+    - npm run lint

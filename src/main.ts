@@ -9,10 +9,10 @@ type configObj = {
  * @param {array} arg -- process.argv
  * @return {promise} resolve nothing
  */
-function processArg(argv: array): Promise<configObj> {
+export async function processArg(argv: Array<String>): Promise<configObj> {
   return Promise.resolve(argv.slice(2))
     .then(args => {
-      return args.reduce((a, arg) => {
+      return args.reduce((a: configObj, arg: String) => {
         if (a.to !== undefined) {
           a.to = arg
         }
