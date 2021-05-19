@@ -8,7 +8,13 @@
 $ npx create-tsdev
 ```
 
-Please note you need to init your project before you can use this tool
+or use npm
+
+```sh
+$ npm init tsdev
+```
+
+Please note you need to init your project before you can use this tool.
 
 ## Options
 
@@ -16,4 +22,4 @@ By default it will init the TS dev env inside your project root. Or you can pass
 
 ---
 
-Joel Chu (c) 2021 
+Joel Chu (c) 2021

@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 // this is just the entry point where it gets call
-const args = process.argv.slice(2)
+const { processArg } = require('./build/main.js')
 
-console.log(`Hello world LOL`, args)
+processArg(process.argv)
+  .then(config => {
+    console.log(`Hello LOL`, config)
+  })
