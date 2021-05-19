@@ -4,7 +4,8 @@
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
   "scripts": {
-    "test": "ava"
+    "test": "ava",
+    "cli": "node ./index.js"
   },
   "repository": {
     "type": "git",
