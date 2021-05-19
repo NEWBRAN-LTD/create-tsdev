@@ -18,5 +18,8 @@
     "ava.js"
   ],
   "author": "Joel Chu <joelchu@foxmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "bin": {
+    "create-tsdev": "./index.js"
+  }
 }
