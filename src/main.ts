@@ -49,6 +49,26 @@ export function changeAndGetPkg(where: string): any {
       return fsx.readJsonSync(pkgFile)
     }
   }
-  // just for f**king around with Typescript 
+  // just for f**king around with Typescript
   throw new CustomError(new TypeError(`${where} does not exist`))
+}
+
+/**
+ * copy over the properties
+ * @param {object} pkg
+ * @return {object} 
+ */
+export function copyProps(pkg: any): any {
+  const myPkg = fsx.readJsonSync(join(__dirname, PKG_FILE))
+  // first merge the devDependencies
+  pkg.devDependencies = Object.assign(pkg.devDependencies, myPkg.devDependencies)
+  // next add the ava options
+  pkg.ava = myPkg.ava
+  // finally add some of the scripts
+  const keys = ["tests", "lint", "build", "clean", "ts-node", "docs"]
+  pkg.scripts = keys.reduce((obj: any, key: string) => (
+    Object.assign(obj, {[key]: myPkg.scripts[key]})
+  ), pkg.scripts)
+
+  return pkg
 }
