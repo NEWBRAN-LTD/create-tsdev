@@ -1,0 +1,21 @@
+{
+  "name": "create-tsdev",
+  "version": "0.0.1",
+  "description": "Using npx to generate a TS dev env",
+  "main": "index.js",
+  "scripts": {
+    "hello": "echo \"hello\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:NEWBRAN/create-tsdev.git"
+  },
+  "keywords": [
+    "Node",
+    "TS",
+    "Typescript",
+    "ava.js"
+  ],
+  "author": "NOBODY",
+  "license": "MIT"
+}

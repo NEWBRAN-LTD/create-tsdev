@@ -1,29 +1,27 @@
 "use strict";
+// just create a top level main function
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processArg = void 0;
+exports.main = void 0;
 const tslib_1 = require("tslib");
+const lib_1 = require("./lib");
 /**
- * @param {array} arg -- process.argv
- * @return {promise} resolve nothing
+ * Top level API
+ * @param {Array<any>} _args from process.argv
+ * @return {void}
+ * @public
  */
-function processArg(argv) {
+function main(_args) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        return Promise.resolve(argv.slice(2))
+        // there is no point of accepting input anyway
+        return lib_1.processArg(_args)
             .then(args => {
-            return args.reduce((a, arg) => {
-                if (a.to !== undefined) {
-                    a.to = arg;
-                }
-                else if (arg.toLowerCase() === '--to') {
-                    a.to = ''; // placeholder
-                }
-                else if (arg === '--skipInstall') {
-                    a.skipInstall = true;
-                }
-                return a;
-            }, {});
-        });
+            const [pkgFile, _pkg] = lib_1.changeAndGetPkg(args.to || process.cwd());
+            const pkg = lib_1.copyProps(_pkg);
+            return { args, pkg, pkgFile };
+        })
+            .then(({ args, pkg, pkgFile }) => (lib_1.overwritePkgJson(pkgFile, pkg)
+            .then(() => lib_1.runInstall(args))));
     });
 }
-exports.processArg = processArg;
+exports.main = main;
 //# sourceMappingURL=main.js.map

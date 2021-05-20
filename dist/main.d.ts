@@ -1,10 +1,7 @@
-declare type configObj = {
-    to?: String;
-    skipInstall?: Boolean;
-};
 /**
- * @param {array} arg -- process.argv
- * @return {promise} resolve nothing
+ * Top level API
+ * @param {Array<any>} _args from process.argv
+ * @return {void}
+ * @public
  */
-export declare function processArg(argv: Array<String>): Promise<configObj>;
-export {};
+export declare function main(_args: Array<any>): Promise<any>;

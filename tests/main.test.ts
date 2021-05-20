@@ -1,20 +1,30 @@
-// main test file
 import test from 'ava'
-import { processArg, changeAndGetPkg, CustomError } from '../src/main'
+import { removeSync, copySync, existsSync, readJsonSync } from 'fs-extra'
+import { join } from 'path'
 
-test(`Expect to able to get the right properties`, async t => {
-  const p = '/home/joel/Projects/create-t1sts'
-  const result = await processArg(['_', '_', '--to', p])
+import { main } from '../src/main'
 
-  t.is(result.to, p)
+const from = join(__dirname, 'fixtures', 'package-tpl.json')
+const to = join(__dirname, 'tmp')
+const pkgFile = join(to, 'package.json')
+
+test.before(() => {
+  copySync(from , pkgFile)
+})
+
+test.after(() => {
+  removeSync(to)
 })
 
 
-test(`Expect to fail if there is no package.json`, t => {
-  const myTestFunc = () => changeAndGetPkg("/path/to/no/where")
-  
-  const err = t.throws<CustomError>(myTestFunc)
-  t.is(err.parent.name, 'TypeError')
-})
+test(`End to end test`, async t => {
+  const res = await main(['--to', to])
+  t.true(res)
+  t.true(existsSync(pkgFile))
 
-test.todo(`Expect to copy over the necessary properties to the package.json`)
+  const pkg = readJsonSync(pkgFile)
+
+  t.true(pkg.dependencies !== undefined)
+  t.true(pkg.scripts !== undefined)
+  t.is(pkg.scripts.test, "ava")
+})

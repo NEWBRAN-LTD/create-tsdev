@@ -5,14 +5,15 @@
   "main": "index.js",
   "files": [
     "index.js",
-    "dist"
+    "dist",
+    "tsconfig.json"
   ],
   "scripts": {
     "test": "ava",
     "cli": "node ./index.js",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist build",
+    "clean": "node ./clean.js",
     "ts-node": "ts-node",
     "docs": "typedoc --entryPoints src/main.ts",
     "build-all": "npm run clean && npm run build && npm run esbuild-node",
