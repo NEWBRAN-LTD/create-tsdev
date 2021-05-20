@@ -1,12 +1,13 @@
 // lib.ts libraries of functions
-import fsx from 'fs-extra'
 import { join, resolve } from 'path'
+import { exec } from 'child_process'
+import fsx from 'fs-extra'
 import { CustomError } from './custom-error'
 
 // the main method
 type configObj = {
-  to?: String,
-  skipInstall? : Boolean
+  to?: string,
+  skipInstall? : boolean
 }
 const PKG_FILE: string = 'package.json'
 
@@ -17,10 +18,10 @@ export { CustomError }
  * @param {array} arg -- process.argv
  * @return {promise} resolve nothing
  */
-export async function processArg(argv: Array<String>): Promise<configObj> {
-  return Promise.resolve(argv.slice(2))
+export async function processArg(argv: Array<string>): Promise<configObj> {
+  return Promise.resolve(argv)
     .then(args => {
-      return args.reduce((a: configObj, arg: String) => {
+      return args.reduce((a: configObj, arg: string) => {
         if (a.to !== undefined) {
           a.to = arg
         }
@@ -38,7 +39,7 @@ export async function processArg(argv: Array<String>): Promise<configObj> {
 /**
  * pass the `to` prop and switch over to that directory
  * @param {string} where to
- * @return {*}
+ * @return {array} [ pkgFile, json ]
  */
 export function changeAndGetPkg(where: string): any {
   if (fsx.existsSync(where)) {
@@ -46,7 +47,11 @@ export function changeAndGetPkg(where: string): any {
     const dir = process.cwd()
     const pkgFile = join(dir, PKG_FILE)
     if (fsx.existsSync(pkgFile)) {
-      return fsx.readJsonSync(pkgFile)
+      // return a tuple instead
+      return [
+        pkgFile,
+        fsx.readJsonSync(pkgFile)
+      ]
     }
   }
   // just for f**king around with Typescript
@@ -73,4 +78,38 @@ export function copyProps(pkg: any): any {
   pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies)
 
   return pkg
+}
+
+/**
+ * just overwrite the existing package.json
+ * @param {string} pkgFile path to package.json
+ * @param {object} pkg content of the json
+ * @return {promise} not throw error that means success
+ */
+export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
+  return fsx.writeJson(pkgFile, pkg)
+}
+
+/**
+ * Execute a npm install if they didn't supply the --noInstall
+ * @param {object} args from command line
+ * @return {void}
+ */
+export function runInstall(args: any) {
+  if (args.skipInstall !== true) {
+    exec("npm install",
+         {cwd: process.cwd()},
+       (error, stdout, stderr) => {
+         if (error) {
+           console.error(`ERROR:`, error)
+           return
+         }
+         console.log(`stdout`, stdout)
+         if (stderr) {
+           console.error(`stderr`, stderr)
+         }
+       })
+  } else {
+    console.log(`All done nothing to do`)
+  }
 }
