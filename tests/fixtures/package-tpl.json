@@ -3,11 +3,6 @@
   "version": "0.0.1",
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
-  "files": [
-    "index.js",
-    "dist",
-    "tsconfig.json"
-  ],
   "scripts": {
     "hello": "echo \"hello\""
   },
@@ -21,12 +16,6 @@
     "Typescript",
     "ava.js"
   ],
-  "author": "Joel Chu <joelchu@foxmail.com>",
-  "license": "MIT",
-  "bin": {
-    "create-tsdev": "./index.js"
-  },
-  "dependencies": {
-    "fs-extra": "^10.0.0"
-  }
+  "author": "NOBODY",
+  "license": "MIT"
 }

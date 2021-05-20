@@ -1,6 +1,6 @@
 // main.ts
 import fsx from 'fs-extra'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { CustomError } from './custom-error'
 
 // the main method
@@ -56,19 +56,21 @@ export function changeAndGetPkg(where: string): any {
 /**
  * copy over the properties
  * @param {object} pkg
- * @return {object} 
+ * @return {object}
  */
 export function copyProps(pkg: any): any {
-  const myPkg = fsx.readJsonSync(join(__dirname, PKG_FILE))
+  const pathToPkg = resolve(__dirname, '..', PKG_FILE)
+  const myPkg = fsx.readJsonSync(pathToPkg)
   // first merge the devDependencies
-  pkg.devDependencies = Object.assign(pkg.devDependencies, myPkg.devDependencies)
+  pkg.devDependencies = Object.assign(pkg.devDependencies || {}, myPkg.devDependencies)
   // next add the ava options
   pkg.ava = myPkg.ava
   // finally add some of the scripts
-  const keys = ["tests", "lint", "build", "clean", "ts-node", "docs"]
+  const keys = ["test", "lint", "build", "clean", "ts-node", "docs"]
   pkg.scripts = keys.reduce((obj: any, key: string) => (
     Object.assign(obj, {[key]: myPkg.scripts[key]})
-  ), pkg.scripts)
+  ), pkg.scripts || {})
+  pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies)
 
   return pkg
 }
