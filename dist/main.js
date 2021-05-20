@@ -6,14 +6,14 @@ const tslib_1 = require("tslib");
 const lib_1 = require("./lib");
 /**
  * Top level API
- * @param {args} array from process.argv
+ * @param {Array<any>} _args from process.argv
  * @return {void}
  * @public
  */
-function main() {
+function main(_args) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         // there is no point of accepting input anyway
-        return lib_1.processArg(process.argv.slice(2))
+        return lib_1.processArg(_args)
             .then(args => {
             const [pkgFile, _pkg] = lib_1.changeAndGetPkg(args.to || process.cwd());
             const pkg = lib_1.copyProps(_pkg);

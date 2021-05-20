@@ -31,6 +31,6 @@ export declare function overwritePkgJson(pkgFile: string, pkg: any): Promise<any
 /**
  * Execute a npm install if they didn't supply the --noInstall
  * @param {object} args from command line
- * @return {void}
+ * @return {promise}
  */
-export declare function runInstall(args: any): void;
+export declare function runInstall(args: any): Promise<any>;

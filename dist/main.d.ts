@@ -1,7 +1,7 @@
 /**
  * Top level API
- * @param {args} array from process.argv
+ * @param {Array<any>} _args from process.argv
  * @return {void}
  * @public
  */
-export declare function main(): Promise<void>;
+export declare function main(_args: Array<any>): Promise<any>;

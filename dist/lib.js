@@ -87,24 +87,28 @@ exports.overwritePkgJson = overwritePkgJson;
 /**
  * Execute a npm install if they didn't supply the --noInstall
  * @param {object} args from command line
- * @return {void}
+ * @return {promise}
  */
 function runInstall(args) {
-    if (args.skipInstall !== true) {
-        child_process_1.exec("npm install", { cwd: process.cwd() }, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`ERROR:`, error);
-                return;
-            }
-            console.log(`stdout`, stdout);
-            if (stderr) {
-                console.error(`stderr`, stderr);
-            }
-        });
-    }
-    else {
-        console.log(`All done nothing to do`);
-    }
+    return new Promise((resolver, rejecter) => {
+        if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
+            child_process_1.exec("npm install", { cwd: process.cwd() }, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`ERROR:`, error);
+                    return rejecter(false);
+                }
+                console.log(`stdout`, stdout);
+                if (stderr) {
+                    console.error(`stderr`, stderr);
+                }
+                resolver(true);
+            });
+        }
+        else {
+            console.log(`All done nothing to do`);
+            resolver(true);
+        }
+    });
 }
 exports.runInstall = runInstall;
 //# sourceMappingURL=lib.js.map
