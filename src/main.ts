@@ -10,13 +10,13 @@ import {
 
 /**
  * Top level API
- * @param {args} array from process.argv
+ * @param {Array<any>} _args from process.argv
  * @return {void}
  * @public
  */
-export async function main() {
+export async function main(_args: Array<any>) {
   // there is no point of accepting input anyway
-  return processArg(process.argv.slice(2))
+  return processArg(_args)
     .then(args => {
       const [ pkgFile, _pkg ] = changeAndGetPkg(args.to || process.cwd())
       const pkg = copyProps(_pkg)

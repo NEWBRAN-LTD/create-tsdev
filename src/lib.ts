@@ -93,23 +93,27 @@ export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
 /**
  * Execute a npm install if they didn't supply the --noInstall
  * @param {object} args from command line
- * @return {void}
+ * @return {promise}
  */
-export function runInstall(args: any) {
-  if (args.skipInstall !== true) {
-    exec("npm install",
-         {cwd: process.cwd()},
-       (error, stdout, stderr) => {
-         if (error) {
-           console.error(`ERROR:`, error)
-           return
-         }
-         console.log(`stdout`, stdout)
-         if (stderr) {
-           console.error(`stderr`, stderr)
-         }
-       })
-  } else {
-    console.log(`All done nothing to do`)
-  }
+export function runInstall(args: any): Promise<any> {
+  return new Promise((resolver, rejecter)  => {
+    if (args.skipInstall !== true) {
+      exec("npm install",
+           {cwd: process.cwd()},
+         (error, stdout, stderr) => {
+           if (error) {
+             console.error(`ERROR:`, error)
+             return rejecter(false)
+           }
+           console.log(`stdout`, stdout)
+           if (stderr) {
+             console.error(`stderr`, stderr)
+           }
+           resolver(true)
+         })
+    } else {
+      console.log(`All done nothing to do`)
+      resolver(true)
+    }
+  })
 }
