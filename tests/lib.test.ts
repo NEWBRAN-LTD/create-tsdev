@@ -7,7 +7,7 @@ import {
   changeAndGetPkg,
   CustomError,
   copyProps
-} from '../src/main'
+} from '../src/lib'
 
 
 const fixtures: string = join(__dirname, 'fixtures')
