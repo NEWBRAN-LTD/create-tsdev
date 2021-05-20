@@ -16,10 +16,10 @@
     "clean": "node ./clean.js",
     "ts-node": "ts-node",
     "docs": "typedoc --entryPoints src/main.ts",
-    "build-all": "npm run clean && npm run build && npm run esbuild-node",
-    "esbuild-node": "esbuild src/cli.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/cli.js",
-    "esbuild-node:dev": "esbuild src/cli.ts --bundle --sourcemap=external --outfile=dist/cli.js",
-    "esbuild-node:watch": "esbuild src/cli.ts --bundle --watch --sourcemap=external --outfile=dist/cli.js",
+    "build-all": "npm run clean && npm run build",
+    "esbuild-node": "esbuild src/main.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/cli.js",
+    "esbuild-node:dev": "esbuild src/main.ts --bundle --sourcemap=external --outfile=dist/cli.js",
+    "esbuild-node:watch": "esbuild src/main.ts --bundle --watch --sourcemap=external --outfile=dist/cli.js",
     "prepublishOnly": "npm run test && npm run build-all"
   },
   "repository": {
