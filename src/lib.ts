@@ -97,7 +97,7 @@ export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
  */
 export function runInstall(args: any): Promise<any> {
   return new Promise((resolver, rejecter)  => {
-    if (args.skipInstall !== true) {
+    if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
       exec("npm install",
            {cwd: process.cwd()},
          (error, stdout, stderr) => {
