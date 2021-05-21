@@ -5,7 +5,8 @@ import {
   changeAndGetPkg,
   copyProps,
   overwritePkgJson,
-  runInstall
+  runInstall,
+  installAction
 } from './lib'
 
 /**
@@ -21,6 +22,14 @@ export async function main(_args: Array<any>) {
       const [ pkgFile, _pkg ] = changeAndGetPkg(args.to || process.cwd())
       const pkg = copyProps(_pkg)
 
+      return { args, pkg, pkgFile }
+    })
+    .then(({ args, pkg, pkgFile }) => {
+      // just run the installAction
+      installAction(args)
+        .catch(() => {
+          console.error(`Fail to install the ${args.action} action`)
+        })
       return { args, pkg, pkgFile }
     })
     .then(({ args, pkg, pkgFile }) => (

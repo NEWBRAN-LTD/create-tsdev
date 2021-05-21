@@ -7,7 +7,8 @@ import {
   PLACEHOLDER,
   PKG_FILE,
   ACTIONS,
-  ACTION_MAP
+  ACTION_MAP,
+  YML_EXT
 } from './constants'
 
 // the main method
@@ -138,13 +139,22 @@ export function runInstall(args: any): Promise<any> {
 
 /**
  * copy over the github / gitlab action
- *
- *
+ * @param {object} args from cli
+ * @return {promise} true on success 
  */
-export function installAction(args: any): Promise<any> {
+export function installAction(args: any): Promise<boolean> {
   return new Promise((resolver, rejecter) => {
-    if (args.action && args.action !== PLACEHOLDER) {
-
+    const _act = args.action
+    if (_act && _act !== PLACEHOLDER) {
+      const ymlFile = join(__dirname, 'actions', [_act, YML_EXT].join('.'))
+      fsx.copy(ymlFile, ACTION_MAP[_act], err => {
+        if (err) {
+          return rejecter(false)
+        }
+        resolver(true)
+      })
+    } else {
+      resolver(true)
     }
   })
 }

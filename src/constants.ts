@@ -7,3 +7,4 @@ export const ACTION_MAP: any = {
   github: ".github/workflows/lint-and-test.yml",
   gitlab: ".gitlab-ci.yml"
 }
+export const YML_EXT = 'yml'
