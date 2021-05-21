@@ -1,15 +1,11 @@
 import { CustomError } from './custom-error';
-declare type configObj = {
-    action?: string;
-    to?: string;
-    skipInstall?: boolean;
-};
+import { configObjType } from './constants';
 export { CustomError };
 /**
  * @param {array} arg -- process.argv
  * @return {promise} resolve nothing
  */
-export declare function processArg(argv: Array<string>): Promise<configObj>;
+export declare function processArg(argv: any): Promise<configObjType>;
 /**
  * pass the `to` prop and switch over to that directory
  * @param {string} where to
@@ -40,4 +36,12 @@ export declare function runInstall(args: any): Promise<any>;
  * @param {object} args from cli
  * @return {promise} true on success
  */
-export declare function installAction(args: any): Promise<any>;
+export declare function installAction(args: any): Promise<configObjType>;
+/**
+ * To create some start-up template or not
+ * 1. If skipTpl === true then no
+ * 2. If they already have a ./src folder then no
+ * @param {object} args
+ * @return {Promise<configObjType>}
+ */
+export declare function setupTpl(args: any): Promise<configObjType>;

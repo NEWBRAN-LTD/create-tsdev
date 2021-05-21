@@ -169,14 +169,14 @@ export function setupTpl(args: any): Promise<configObjType> {
     const projectDir = process.cwd()
     const tplDir = join(__dirname, 'tpl')
     const srcDir = join(projectDir, 'src')
-    if (!existsSync(srcDir)) {
+    if (!fsx.existsSync(srcDir)) {
       const files = [
         [join(tplDir, 'main.tpl'), join(projectDir, 'main.ts')],
         [join(tplDir, 'main.test.tpl'), join(projectDir, 'main.test.ts')]
       ]
 
       return Promise.all(
-        files.map(fileTodo => Reflect.apply(fsx.copy, null, fileTodo)
+        files.map(fileTodo => Reflect.apply(fsx.copy, null, fileTodo))
       )
       .then(() => args)
     }

@@ -1,7 +1,7 @@
 /**
  * Top level API
- * @param {Array<any>} _args from process.argv
- * @return {void}
+ * @param {Object} _args from process.argv could use the type but it will be pointless
+ * @return {Promise<any>}
  * @public
  */
-export declare function main(_args: Array<any>): Promise<any>;
+export declare function main(_args: any): Promise<any>;

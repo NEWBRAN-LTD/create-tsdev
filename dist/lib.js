@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.installAction = exports.runInstall = exports.overwritePkgJson = exports.copyProps = exports.changeAndGetPkg = exports.processArg = exports.CustomError = void 0;
+exports.setupTpl = exports.installAction = exports.runInstall = exports.overwritePkgJson = exports.copyProps = exports.changeAndGetPkg = exports.processArg = exports.CustomError = void 0;
 const tslib_1 = require("tslib");
 // lib.ts libraries of functions
 const path_1 = require("path");
@@ -17,30 +17,19 @@ function processArg(argv) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(argv)
             .then(args => {
-            return args.reduce((a, arg) => {
-                switch (true) {
-                    case (a.to === constants_1.PLACEHOLDER):
-                        a.to = arg;
-                        break;
-                    case (arg.toLowerCase() === '--to'):
-                        a.to = constants_1.PLACEHOLDER; // placeholder
-                        break;
-                    case (arg === '--skipInstall'):
-                        a.skipInstall = true;
-                        break;
-                    case (arg.toLowerCase() === '--action'):
-                        a.action = constants_1.PLACEHOLDER; // placeholder
-                        break;
-                    case (a.action === constants_1.PLACEHOLDER):
-                        if (constants_1.ACTIONS.find(a => a === arg.toLowerCase())) {
-                            a.action = arg.toLowerCase();
-                        }
-                        break;
-                    default:
-                    // do nothing
+            const keys = Object.keys(constants_1.DEFAULT_OPTIONS);
+            return keys
+                .filter(key => {
+                const check = argv[key] !== undefined;
+                // need to check this one
+                if (check && key === constants_1.ACTION_NAME) {
+                    const find = constants_1.ACTIONS.filter(a => a === args[key].toLowerCase());
+                    return find.length > 0;
                 }
-                return a;
-            }, {});
+                return check;
+            })
+                .map(key => ({ [key]: args[key] }))
+                .reduce((a, b) => Object.assign(a, b), {});
         });
     });
 }
@@ -53,8 +42,7 @@ exports.processArg = processArg;
 function changeAndGetPkg(where) {
     if (fs_extra_1.default.existsSync(where)) {
         process.chdir(where);
-        const dir = process.cwd();
-        const pkgFile = path_1.join(dir, constants_1.PKG_FILE);
+        const pkgFile = path_1.join(where, constants_1.PKG_FILE);
         if (fs_extra_1.default.existsSync(pkgFile)) {
             // return a tuple instead
             return [
@@ -75,14 +63,13 @@ exports.changeAndGetPkg = changeAndGetPkg;
 function copyProps(pkg) {
     const pathToPkg = path_1.resolve(__dirname, '..', constants_1.PKG_FILE);
     const myPkg = fs_extra_1.default.readJsonSync(pathToPkg);
-    // first merge the devDependencies
+    // first merge the Dependencies
+    pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies);
     pkg.devDependencies = Object.assign(pkg.devDependencies || {}, myPkg.devDependencies);
     // next add the ava options
     pkg.ava = myPkg.ava;
     // finally add some of the scripts
-    const keys = ["test", "lint", "build", "clean", "ts-node", "docs"];
-    pkg.scripts = keys.reduce((obj, key) => (Object.assign(obj, { [key]: myPkg.scripts[key] })), pkg.scripts || {});
-    pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies);
+    pkg.scripts = constants_1.TARGET_KEYS.reduce((obj, key) => (Object.assign(obj, { [key]: myPkg.scripts[key] })), pkg.scripts || {});
     return pkg;
 }
 exports.copyProps = copyProps;
@@ -150,4 +137,28 @@ function installAction(args) {
     return Promise.resolve(args);
 }
 exports.installAction = installAction;
+/**
+ * To create some start-up template or not
+ * 1. If skipTpl === true then no
+ * 2. If they already have a ./src folder then no
+ * @param {object} args
+ * @return {Promise<configObjType>}
+ */
+function setupTpl(args) {
+    if (args.skipTpl !== true) {
+        const projectDir = process.cwd();
+        const tplDir = path_1.join(__dirname, 'tpl');
+        const srcDir = path_1.join(projectDir, 'src');
+        if (!fs_extra_1.default.existsSync(srcDir)) {
+            const files = [
+                [path_1.join(tplDir, 'main.tpl'), path_1.join(projectDir, 'main.ts')],
+                [path_1.join(tplDir, 'main.test.tpl'), path_1.join(projectDir, 'main.test.ts')]
+            ];
+            return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.default.copy, null, fileTodo)))
+                .then(() => args);
+        }
+    }
+    return Promise.resolve(args);
+}
+exports.setupTpl = setupTpl;
 //# sourceMappingURL=lib.js.map
