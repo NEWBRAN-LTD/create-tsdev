@@ -15,8 +15,6 @@ import {
   configObjType
 } from './constants'
 
-
-
 // re-export
 export { CustomError }
 
@@ -106,7 +104,8 @@ export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
  */
 export function runInstall(args: any): Promise<any> {
   return new Promise((resolver, rejecter)  => {
-    if (args.skipInstall === true && process.env.NODE_ENV !== 'test') {
+    if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
+      console.log(`running npm install`)
       exec("npm install",
            {cwd: process.cwd()},
          (error, stdout, stderr) => {

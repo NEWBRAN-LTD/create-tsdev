@@ -90,7 +90,8 @@ exports.overwritePkgJson = overwritePkgJson;
  */
 function runInstall(args) {
     return new Promise((resolver, rejecter) => {
-        if (args.skipInstall === true && process.env.NODE_ENV !== 'test') {
+        if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
+            console.log(`running npm install`);
             child_process_1.exec("npm install", { cwd: process.cwd() }, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`ERROR:`, error);
