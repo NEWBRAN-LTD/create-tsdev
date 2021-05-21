@@ -43,4 +43,8 @@ test(`End to end test`, async t => {
   // check if the action install correctly
   t.truthy(readFileSync(ymlFile) , 'Check to see if the action file got copy')
 
+  // next check if there is template files
+  t.true(existsSync(join(to, 'src', 'main.ts')))
+  t.true(existsSync(join(to, 'tests', 'main.test.ts')))
+
 })
