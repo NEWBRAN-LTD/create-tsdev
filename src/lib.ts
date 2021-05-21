@@ -5,6 +5,7 @@ import fsx from 'fs-extra'
 import { CustomError } from './custom-error'
 import {
   PLACEHOLDER,
+  TARGET_KEYS,
   PKG_FILE,
   ACTION_NAME,
   ACTIONS,
@@ -53,8 +54,8 @@ export async function processArg(argv: any): Promise<configObjType> {
 export function changeAndGetPkg(where: string): any {
   if (fsx.existsSync(where)) {
     process.chdir(where)
-    const dir = process.cwd()
-    const pkgFile = join(dir, PKG_FILE)
+    const pkgFile = join(where, PKG_FILE)
+
     if (fsx.existsSync(pkgFile)) {
       // return a tuple instead
       return [
@@ -75,16 +76,15 @@ export function changeAndGetPkg(where: string): any {
 export function copyProps(pkg: any): any {
   const pathToPkg = resolve(__dirname, '..', PKG_FILE)
   const myPkg = fsx.readJsonSync(pathToPkg)
-  // first merge the devDependencies
+  // first merge the Dependencies
+  pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies)
   pkg.devDependencies = Object.assign(pkg.devDependencies || {}, myPkg.devDependencies)
   // next add the ava options
   pkg.ava = myPkg.ava
   // finally add some of the scripts
-  const keys = ["test", "lint", "build", "clean", "ts-node", "docs"]
-  pkg.scripts = keys.reduce((obj: any, key: string) => (
+  pkg.scripts = TARGET_KEYS.reduce((obj: any, key: string) => (
     Object.assign(obj, {[key]: myPkg.scripts[key]})
   ), pkg.scripts || {})
-  pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies)
 
   return pkg
 }
@@ -161,11 +161,25 @@ export function installAction(args: any): Promise<configObjType> {
  * To create some start-up template or not
  * 1. If skipTpl === true then no
  * 2. If they already have a ./src folder then no
- *
+ * @param {object} args
+ * @return {Promise<configObjType>}
  */
 export function setupTpl(args: any): Promise<configObjType> {
   if (args.skipTpl !== true) {
+    const projectDir = process.cwd()
+    const tplDir = join(__dirname, 'tpl')
+    const srcDir = join(projectDir, 'src')
+    if (!existsSync(srcDir)) {
+      const files = [
+        [join(tplDir, 'main.tpl'), join(projectDir, 'main.ts')],
+        [join(tplDir, 'main.test.tpl'), join(projectDir, 'main.test.ts')]
+      ]
 
+      return Promise.all(
+        files.map(fileTodo => Reflect.apply(fsx.copy, null, fileTodo)
+      )
+      .then(() => args)
+    }
   }
 
   return Promise.resolve(args)

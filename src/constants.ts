@@ -11,6 +11,7 @@ export const DEFAULT_OPTIONS = {
 }
 
 export const PKG_FILE: string = 'package.json'
+export const TARGET_KEYS: Array<string> =  ["test", "lint", "build", "clean", "ts-node", "docs"]
 
 export const ACTION_MAP: any = {
   github: ".github/workflows/lint-and-test.yml",

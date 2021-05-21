@@ -6,12 +6,13 @@ import {
   copyProps,
   overwritePkgJson,
   runInstall,
-  installAction
+  installAction,
+  setupTpl
 } from './lib'
 
 /**
  * Top level API
- * @param {Object} _args from process.argv could use the type but it will be pointless 
+ * @param {Object} _args from process.argv could use the type but it will be pointless
  * @return {Promise<any>}
  * @public
  */
@@ -30,5 +31,6 @@ export async function main(_args: any): Promise<any> {
     ))
     // not ideal if the action fail then the next will not run
     .then(args => installAction(args))
+    .then(args => setupTpl(args))
     .then(args => runInstall(args))
 }
