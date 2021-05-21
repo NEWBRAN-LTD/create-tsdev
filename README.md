@@ -20,9 +20,9 @@ Please note you need to init your project before you can use this tool.
 
 ## Options
 
-By default it will init the TS dev env inside your project root. Or you can pass `--to /where/your/project/root`. So it will switch over to that folder.
-
-You can also pass `--skipInstall` so it won't run the `npm install` in the end.
+- `--to /where/your/project/root`: By default it will init the TS dev env inside your project root. Or you can pass `--to /where/your/project/root`. So it will switch over to that folder.
+- `--skipInstall`: it won't run the `npm install` in the end.
+- `--action`: options are `github` (will add `github.yml` template) or `gitlab` (will add `gitlab.yml`)
 
 ## Credits
 
