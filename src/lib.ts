@@ -156,11 +156,11 @@ export function installAction(args: any): Promise<any> {
 
       return fsx.copy(ymlFile, dest)
         .then(() => {
-          console.log(`${_act} ${YMLFILE} install to ${dest}`)
+          console.log(`${_act} ${YML_EXT} install to ${dest}`)
           return args
         })
         .catch(err => {
-          console.error(`Copy ${_act} ${YML_FILE} failed`)
+          console.error(`Copy ${_act} ${YML_EXT} failed`, err)
         })
     }
     // noting to do
