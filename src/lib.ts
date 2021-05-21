@@ -10,16 +10,11 @@ import {
   ACTIONS,
   ACTION_MAP,
   YML_EXT,
-  DEFAULT_OPTIONS
+  DEFAULT_OPTIONS,
+  configObjType
 } from './constants'
 
-// the main method
-type configObj = {
-  action?: string,
-  to?: string,
-  skipInstall? : boolean,
-  skipTpl?: boolean
-}
+
 
 // re-export
 export { CustomError }
@@ -28,7 +23,7 @@ export { CustomError }
  * @param {array} arg -- process.argv
  * @return {promise} resolve nothing
  */
-export async function processArg(argv: any): Promise<configObj> {
+export async function processArg(argv: any): Promise<configObjType> {
   return Promise.resolve(argv)
     .then(args => {
       const keys = Object.keys(DEFAULT_OPTIONS)
@@ -137,7 +132,7 @@ export function runInstall(args: any): Promise<any> {
  * @param {object} args from cli
  * @return {promise} true on success
  */
-export function installAction(args: any): Promise<any> {
+export function installAction(args: any): Promise<configObjType> {
     const _act = args.action
     if (_act && _act !== PLACEHOLDER) {
       const ymlFile = join(__dirname, 'actions', [_act, YML_EXT].join('.'))
@@ -159,4 +154,19 @@ export function installAction(args: any): Promise<any> {
     }
     // noting to do
     return Promise.resolve(args)
+}
+
+
+/**
+ * To create some start-up template or not
+ * 1. If skipTpl === true then no
+ * 2. If they already have a ./src folder then no
+ *
+ */
+export function setupTpl(args: any): Promise<configObjType> {
+  if (args.skipTpl !== true) {
+
+  }
+
+  return Promise.resolve(args)
 }

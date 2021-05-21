@@ -17,3 +17,13 @@ export const ACTION_MAP: any = {
   gitlab: ".gitlab-ci.yml"
 }
 export const YML_EXT = 'yml'
+
+// the main method
+type configObjType = {
+  action?: string,
+  to?: string,
+  skipInstall? : boolean,
+  skipTpl?: boolean
+}
+
+export { configObjType }
