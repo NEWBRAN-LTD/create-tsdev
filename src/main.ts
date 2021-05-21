@@ -24,16 +24,11 @@ export async function main(_args: Array<any>) {
 
       return { args, pkg, pkgFile }
     })
-    .then(({ args, pkg, pkgFile }) => {
-      // just run the installAction
-      installAction(args)
-        .catch(() => {
-          console.error(`Fail to install the ${args.action} action`)
-        })
-      return { args, pkg, pkgFile }
-    })
-    .then(({ args, pkg, pkgFile }) => (
+    .then( ({ args, pkg, pkgFile }) => (
       overwritePkgJson(pkgFile, pkg)
-        .then(() => runInstall(args))
+        .then(() => args)
     ))
+    // not ideal if the action fail then the next will not run
+    .then(args => installAction(args))
+    .then(args => runInstall(args))
 }

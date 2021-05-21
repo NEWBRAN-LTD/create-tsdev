@@ -20,7 +20,8 @@
     "esbuild-node": "esbuild src/main.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/cli.js",
     "esbuild-node:dev": "esbuild src/main.ts --bundle --sourcemap=external --outfile=dist/cli.js",
     "esbuild-node:watch": "esbuild src/main.ts --bundle --watch --sourcemap=external --outfile=dist/cli.js",
-    "prepublishOnly": "npm run test && npm run build-all"
+    "prepublishOnly": "npm run test && npm run build-all",
+    "copy-test": "node ./tests/fixtures/copy.js"
   },
   "repository": {
     "type": "git",

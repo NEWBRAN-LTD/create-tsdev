@@ -143,28 +143,26 @@ export function runInstall(args: any): Promise<any> {
  * @param {object} args from cli
  * @return {promise} true on success
  */
-export function installAction(args: any): Promise<boolean> {
-  return new Promise((resolver, rejecter) => {
+export function installAction(args: any): Promise<any> {
     const _act = args.action
     if (_act && _act !== PLACEHOLDER) {
       const ymlFile = join(__dirname, 'actions', [_act, YML_EXT].join('.'))
+      const dest = join(process.cwd(), ACTION_MAP[_act])
 
-      console.log(ymlFile)
-
-      const dest = ACTION_MAP[_act]
       // stupid hack
       if (_act === 'github') {
         fsx.ensureDir(dirname(dest))
       }
 
-      fsx.copy(ymlFile, dest, (err: any) => {
-        if (err) {
-          return rejecter(false)
-        }
-        resolver(true)
-      })
-    } else {
-      resolver(true)
+      return fsx.copy(ymlFile, dest)
+        .then(() => {
+          console.log(`${_act} ${YMLFILE} install to ${dest}`)
+          return args
+        })
+        .catch(err => {
+          console.error(`Copy ${_act} ${YML_FILE} failed`)
+        })
     }
-  })
+    // noting to do
+    return Promise.resolve(args)
 }
