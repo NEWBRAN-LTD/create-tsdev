@@ -11,11 +11,11 @@ import {
 
 /**
  * Top level API
- * @param {Array<any>} _args from process.argv
- * @return {void}
+ * @param {Object} _args from process.argv could use the type but it will be pointless 
+ * @return {Promise<any>}
  * @public
  */
-export async function main(_args: Array<any>) {
+export async function main(_args: any): Promise<any> {
   // there is no point of accepting input anyway
   return processArg(_args)
     .then(args => {

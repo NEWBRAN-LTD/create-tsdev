@@ -17,7 +17,8 @@ import {
 type configObj = {
   action?: string,
   to?: string,
-  skipInstall? : boolean
+  skipInstall? : boolean,
+  skipTpl?: boolean
 }
 
 // re-export
@@ -34,14 +35,15 @@ export async function processArg(argv: any): Promise<configObj> {
 
       return keys
         .filter(key => {
+          const check = argv[key] !== undefined
           // need to check this one
-          if (key === ACTION_NAME) {
-            const check = ACTIONS.filter(a => a === args[key].toLowerCase())
+          if (check && key === ACTION_NAME) {
+            const find = ACTIONS.filter(a => a === args[key].toLowerCase())
 
-            return check.length > 0
+            return find.length > 0
           }
 
-          return argv[key] !== undefined
+          return check
         })
         .map(key => ({ [key]: args[key] }))
         .reduce((a, b) => Object.assign(a, b), {})
