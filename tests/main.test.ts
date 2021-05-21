@@ -1,10 +1,10 @@
 import test from 'ava'
 import { removeSync, copySync, readJsonSync } from 'fs-extra'
-import { existsSync, readFileSync } from 'fs' 
+import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
 
-import { main } from '../src/main'
 import { ACTION_MAP } from '../src/constants'
+import { main } from '../src/main'
 
 const from = join(__dirname, 'fixtures', 'package-tpl.json')
 const to = join(__dirname, 'tmp')
