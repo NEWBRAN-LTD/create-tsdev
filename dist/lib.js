@@ -151,8 +151,8 @@ function setupTpl(args) {
         const srcDir = path_1.join(projectDir, 'src');
         if (!fs_extra_1.default.existsSync(srcDir)) {
             const files = [
-                [path_1.join(tplDir, 'main.tpl'), path_1.join(projectDir, 'main.ts')],
-                [path_1.join(tplDir, 'main.test.tpl'), path_1.join(projectDir, 'main.test.ts')]
+                [path_1.join(tplDir, 'main.tpl'), path_1.join(projectDir, 'src', 'main.ts')],
+                [path_1.join(tplDir, 'main.test.tpl'), path_1.join(projectDir, 'tests', 'main.test.ts')]
             ];
             return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.default.copy, null, fileTodo)))
                 .then(() => args);
