@@ -1,5 +1,5 @@
 // lib.ts libraries of functions
-import { join, resolve } from 'path'
+import { join, resolve, dirname } from 'path'
 import { exec } from 'child_process'
 import fsx from 'fs-extra'
 import { CustomError } from './custom-error'
@@ -13,6 +13,7 @@ import {
 
 // the main method
 type configObj = {
+  action?: string,
   to?: string,
   skipInstall? : boolean
 }
@@ -140,14 +141,23 @@ export function runInstall(args: any): Promise<any> {
 /**
  * copy over the github / gitlab action
  * @param {object} args from cli
- * @return {promise} true on success 
+ * @return {promise} true on success
  */
 export function installAction(args: any): Promise<boolean> {
   return new Promise((resolver, rejecter) => {
     const _act = args.action
     if (_act && _act !== PLACEHOLDER) {
       const ymlFile = join(__dirname, 'actions', [_act, YML_EXT].join('.'))
-      fsx.copy(ymlFile, ACTION_MAP[_act], err => {
+
+      console.log(ymlFile)
+
+      const dest = ACTION_MAP[_act]
+      // stupid hack
+      if (_act === 'github') {
+        fsx.ensureDir(dirname(dest))
+      }
+
+      fsx.copy(ymlFile, dest, (err: any) => {
         if (err) {
           return rejecter(false)
         }

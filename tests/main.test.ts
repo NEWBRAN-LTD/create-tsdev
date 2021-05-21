@@ -11,6 +11,8 @@ const pkgFile = join(to, 'package.json')
 const action = 'github'
 
 test.before(() => {
+  // clean up first 
+  removeSync(to)
   copySync(from , pkgFile)
 })
 
@@ -21,7 +23,7 @@ test.after(() => {
 
 test(`End to end test`, async t => {
   const res = await main(['--to', to, '--action', action])
-  
+
   t.true(res)
   t.true(existsSync(pkgFile))
 
@@ -33,6 +35,6 @@ test(`End to end test`, async t => {
   t.is(pkg.scripts.test, "ava")
 
   // check if the action install correctly
-  t.true(existsSync(join(to, ACTION_MAP[action])))
+  t.true(existsSync(join(to, ACTION_MAP[action])) , 'Check to see if the action file got copy')
 
 })
