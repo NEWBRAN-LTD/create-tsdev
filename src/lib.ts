@@ -6,9 +6,11 @@ import { CustomError } from './custom-error'
 import {
   PLACEHOLDER,
   PKG_FILE,
+  ACTION_NAME,
   ACTIONS,
   ACTION_MAP,
-  YML_EXT
+  YML_EXT,
+  DEFAULT_OPTIONS
 } from './constants'
 
 // the main method
@@ -25,34 +27,24 @@ export { CustomError }
  * @param {array} arg -- process.argv
  * @return {promise} resolve nothing
  */
-export async function processArg(argv: Array<string>): Promise<configObj> {
+export async function processArg(argv: any): Promise<configObj> {
   return Promise.resolve(argv)
     .then(args => {
-      return args.reduce((a: configObj, arg: string) => {
-        switch (true) {
-          case (a.to === PLACEHOLDER):
-            a.to = arg
-            break
-          case (arg.toLowerCase() === '--to'):
-            a.to = PLACEHOLDER // placeholder
-            break
-          case (arg === '--skipInstall'):
-            a.skipInstall = true
-            break
-          case (arg.toLowerCase() === '--action'):
-            a.action = PLACEHOLDER // placeholder
-            break
-          case (a.action === PLACEHOLDER):
-            if (ACTIONS.find(a => a === arg.toLowerCase())) {
-              a.action = arg.toLowerCase()
-            }
-            break
-          default:
-            // do nothing
-        }
+      const keys = Object.keys(DEFAULT_OPTIONS)
 
-        return a
-      }, {})
+      return keys
+        .filter(key => {
+          // need to check this one
+          if (key === ACTION_NAME) {
+            const check = ACTIONS.filter(a => a === args[key].toLowerCase())
+
+            return check.length > 0
+          }
+
+          return argv[key] !== undefined
+        })
+        .map(key => ({ [key]: args[key] }))
+        .reduce((a, b) => Object.assign(a, b), {})
     })
 }
 
