@@ -3,13 +3,18 @@ import { join, resolve } from 'path'
 import { exec } from 'child_process'
 import fsx from 'fs-extra'
 import { CustomError } from './custom-error'
+import {
+  PLACEHOLDER,
+  PKG_FILE,
+  ACTIONS,
+  ACTION_MAP
+} from './constants'
 
 // the main method
 type configObj = {
   to?: string,
   skipInstall? : boolean
 }
-const PKG_FILE: string = 'package.json'
 
 // re-export
 export { CustomError }
@@ -22,15 +27,28 @@ export async function processArg(argv: Array<string>): Promise<configObj> {
   return Promise.resolve(argv)
     .then(args => {
       return args.reduce((a: configObj, arg: string) => {
-        if (a.to !== undefined) {
-          a.to = arg
+        switch (true) {
+          case (a.to === PLACEHOLDER):
+            a.to = arg
+            break
+          case (arg.toLowerCase() === '--to'):
+            a.to = PLACEHOLDER // placeholder
+            break
+          case (arg === '--skipInstall'):
+            a.skipInstall = true
+            break
+          case (arg.toLowerCase() === '--action'):
+            a.action = PLACEHOLDER // placeholder
+            break
+          case (a.action === PLACEHOLDER):
+            if (ACTIONS.find(a => a === arg.toLowerCase())) {
+              a.action = arg.toLowerCase()
+            }
+            break
+          default:
+            // do nothing
         }
-        else if (arg.toLowerCase() === '--to') {
-          a.to = '' // placeholder
-        }
-        else if (arg === '--skipInstall') {
-          a.skipInstall = true
-        }
+
         return a
       }, {})
     })
@@ -97,7 +115,7 @@ export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
  */
 export function runInstall(args: any): Promise<any> {
   return new Promise((resolver, rejecter)  => {
-    if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
+    if (args.skipInstall === true && process.env.NODE_ENV !== 'test') {
       exec("npm install",
            {cwd: process.cwd()},
          (error, stdout, stderr) => {
@@ -114,6 +132,19 @@ export function runInstall(args: any): Promise<any> {
     } else {
       console.log(`All done nothing to do`)
       resolver(true)
+    }
+  })
+}
+
+/**
+ * copy over the github / gitlab action
+ *
+ *
+ */
+export function installAction(args: any): Promise<any> {
+  return new Promise((resolver, rejecter) => {
+    if (args.action && args.action !== PLACEHOLDER) {
+
     }
   })
 }
