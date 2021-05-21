@@ -80,7 +80,7 @@ exports.copyProps = copyProps;
  * @return {promise} not throw error that means success
  */
 function overwritePkgJson(pkgFile, pkg) {
-    return fs_extra_1.default.writeJson(pkgFile, pkg);
+    return fs_extra_1.default.writeJson(pkgFile, pkg, { spaces: 2 });
 }
 exports.overwritePkgJson = overwritePkgJson;
 /**
@@ -104,7 +104,6 @@ function runInstall(args) {
             });
         }
         else {
-            console.log(`All done nothing to do`);
             resolver(true);
         }
     });

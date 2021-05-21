@@ -96,7 +96,7 @@ export function copyProps(pkg: any): any {
  * @return {promise} not throw error that means success
  */
 export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
-  return fsx.writeJson(pkgFile, pkg)
+  return fsx.writeJson(pkgFile, pkg, {spaces: 2})
 }
 
 /**
@@ -121,7 +121,6 @@ export function runInstall(args: any): Promise<any> {
            resolver(true)
          })
     } else {
-      console.log(`All done nothing to do`)
       resolver(true)
     }
   })
