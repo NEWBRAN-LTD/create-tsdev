@@ -19,16 +19,11 @@ function main(_args) {
             const pkg = lib_1.copyProps(_pkg);
             return { args, pkg, pkgFile };
         })
-            .then(({ args, pkg, pkgFile }) => {
-            // just run the installAction
-            lib_1.installAction(args)
-                .catch(() => {
-                console.error(`Fail to install the ${args.action} action`);
-            });
-            return { args, pkg, pkgFile };
-        })
             .then(({ args, pkg, pkgFile }) => (lib_1.overwritePkgJson(pkgFile, pkg)
-            .then(() => lib_1.runInstall(args))));
+            .then(() => args)))
+            // not ideal if the action fail then the next will not run
+            .then(args => lib_1.installAction(args))
+            .then(args => lib_1.runInstall(args));
     });
 }
 exports.main = main;

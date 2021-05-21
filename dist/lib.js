@@ -129,27 +129,25 @@ exports.runInstall = runInstall;
  * @return {promise} true on success
  */
 function installAction(args) {
-    return new Promise((resolver, rejecter) => {
-        const _act = args.action;
-        if (_act && _act !== constants_1.PLACEHOLDER) {
-            const ymlFile = path_1.join(__dirname, 'actions', [_act, constants_1.YML_EXT].join('.'));
-            console.log(ymlFile);
-            const dest = constants_1.ACTION_MAP[_act];
-            // stupid hack
-            if (_act === 'github') {
-                fs_extra_1.default.ensureDir(path_1.dirname(dest));
-            }
-            fs_extra_1.default.copy(ymlFile, dest, (err) => {
-                if (err) {
-                    return rejecter(false);
-                }
-                resolver(true);
-            });
+    const _act = args.action;
+    if (_act && _act !== constants_1.PLACEHOLDER) {
+        const ymlFile = path_1.join(__dirname, 'actions', [_act, constants_1.YML_EXT].join('.'));
+        const dest = path_1.join(process.cwd(), constants_1.ACTION_MAP[_act]);
+        // stupid hack
+        if (_act === 'github') {
+            fs_extra_1.default.ensureDir(path_1.dirname(dest));
         }
-        else {
-            resolver(true);
-        }
-    });
+        return fs_extra_1.default.copy(ymlFile, dest)
+            .then(() => {
+            console.log(`${_act} ${constants_1.YML_EXT} install to ${dest}`);
+            return args;
+        })
+            .catch(err => {
+            console.error(`Copy ${_act} ${constants_1.YML_EXT} failed`, err);
+        });
+    }
+    // noting to do
+    return Promise.resolve(args);
 }
 exports.installAction = installAction;
 //# sourceMappingURL=lib.js.map

@@ -40,4 +40,4 @@ export declare function runInstall(args: any): Promise<any>;
  * @param {object} args from cli
  * @return {promise} true on success
  */
-export declare function installAction(args: any): Promise<boolean>;
+export declare function installAction(args: any): Promise<any>;

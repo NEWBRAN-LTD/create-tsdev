@@ -39,7 +39,7 @@ test(`End to end test`, async t => {
   // @BUG from node.js the path point of an existing file (its hidden) but both report not found
   // where I can cat it
   const ymlFile = join(to, ACTION_MAP[action])
-  console.log(ymlFile)
+  // console.log(ymlFile)
   // check if the action install correctly
   t.truthy(readFileSync(ymlFile) , 'Check to see if the action file got copy')
 
