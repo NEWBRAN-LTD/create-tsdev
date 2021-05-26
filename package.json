@@ -47,6 +47,7 @@
     "ava": "^3.15.0",
     "aws-v-cli": "^0.2.3",
     "esbuild": "^0.12.0",
+    "esbuild-register": "^2.5.0",
     "eslint": "^7.26.0",
     "ts-node": "^9.1.1",
     "typedoc": "^0.20.36",
@@ -57,6 +58,9 @@
       "ts"
     ],
     "require": [
+      "esbuild-register"
+    ],
+    "old-require-should-not-get-called": [
       "ts-node/register"
     ]
   },
