@@ -182,3 +182,10 @@ export async function setupTpl(args: any): Promise<configObjType> {
   )
   .then(() => args)
 }
+
+/*
+// just for testing purpose
+export async function dummyFn(): Promise<any> {
+  return 'something'
+}
+*/

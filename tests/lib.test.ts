@@ -28,6 +28,16 @@ test.after(() => {
   removeSync(tmp)
 })
 
+/*
+// result: IT DOES 
+test.only(`To see if the async method can return a promise`, t => {
+  return dummyFn()
+    .then(r => {
+      t.truthy(r)
+    })
+})
+*/
+
 test(`Expect to able to get the right properties`, async t => {
   const p = '/home/joel/Projects/create-t1sts'
   const result = await processArg({to: p, skipInstall: true, action: 'somethingelse', skipTpl: true})
