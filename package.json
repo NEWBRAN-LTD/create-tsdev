@@ -54,9 +54,9 @@
     "typedoc": "^0.20.36",
     "typescript": "^4.2.4"
   },
-  "_ava": {
+  "ava": {
     "extensions": [
-      "ts", "_js_"
+      "ts"
     ],
     "require": [
       "esbuild-register"
