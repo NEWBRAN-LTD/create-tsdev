@@ -59,9 +59,6 @@
     ],
     "require": [
       "esbuild-register"
-    ],
-    "old-require-should-not-get-called": [
-      "ts-node/register"
     ]
   },
   "dependencies": {
