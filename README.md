@@ -20,9 +20,10 @@ Please note you need to init your project before you can use this tool.
 
 ## Options
 
-By default it will init the TS dev env inside your project root. Or you can pass `--to /where/your/project/root`. So it will switch over to that folder.
-
-You can also pass `--skipInstall` so it won't run the `npm install` in the end.
+- `--to /where/your/project/root`: By default it will init the TS dev env inside your project root. Or you can pass `--to /where/your/project/root`. So it will switch over to that folder.
+- `--skipInstall`: it won't run the `npm install` in the end.
+- `--action`: options are `github` (will add `github.yml` template) or `gitlab` (will add `gitlab.yml`)
+- `--skipTpl`: If there is no `src` folder in your project root. Then it will create some template files (as well as a tests directory with a test file in it). If you pass this option then it will skip this step entirely.
 
 ## Credits
 
@@ -30,9 +31,10 @@ The idea is based on this [blog post](https://www.metachris.com/2021/04/starting
 
 ## TODOS
 
-- Add options to add github / gitlab CI actions
-- Option to setup postCSS and browser env
-- for ava.js, work out a way to use esbuild instead of `node-ts/register` (just like using `esm`)
+- ~~Add options to add github / gitlab CI actions~~
+- ~~Option to setup postCSS and browser env~~ (this will be in another package)
+- Add serverless CI option
+- for ava.js, work out a way to use `esbuild` instead of `node-ts/register` (just like using `esm`)
 
 
 ---

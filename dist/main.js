@@ -6,8 +6,8 @@ const tslib_1 = require("tslib");
 const lib_1 = require("./lib");
 /**
  * Top level API
- * @param {Array<any>} _args from process.argv
- * @return {void}
+ * @param {Object} _args from process.argv could use the type but it will be pointless
+ * @return {Promise<any>}
  * @public
  */
 function main(_args) {
@@ -20,7 +20,11 @@ function main(_args) {
             return { args, pkg, pkgFile };
         })
             .then(({ args, pkg, pkgFile }) => (lib_1.overwritePkgJson(pkgFile, pkg)
-            .then(() => lib_1.runInstall(args))));
+            .then(() => args)))
+            // not ideal if the action fail then the next will not run
+            .then(args => lib_1.installAction(args))
+            .then(args => lib_1.setupTpl(args))
+            .then(args => lib_1.runInstall(args));
     });
 }
 exports.main = main;

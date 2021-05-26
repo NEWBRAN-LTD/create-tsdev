@@ -1,36 +1,42 @@
 # create-tsdev
 
-#### Description
-Using npx to generate a TS dev env. 
+> Using npx to generate a latest (2021) Typescript development environment for node.js side
 
-#### Software Architecture
-Software architecture description
+This setup is using [esbuild](https://esbuild.github.io/getting-started/) (claim to be 3 times faster than webpack / babel) and [ava.js](https://github.com/avajs/) a real modern testing suite for node.js (My options ava.js is way way way better than this [joker](https://jestjs.io))
 
-#### Installation
+## Installation
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```sh
+$ npx create-tsdev
+```
 
-#### Instructions
+or use npm
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```sh
+$ npm init tsdev
+```
 
-#### Contribution
+Please note you need to init your project before you can use this tool.
 
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
+## Options
+
+- `--to /where/your/project/root`: By default it will init the TS dev env inside your project root. Or you can pass `--to /where/your/project/root`. So it will switch over to that folder.
+- `--skipInstall`: it won't run the `npm install` in the end.
+- `--action`: options are `github` (will add `github.yml` template) or `gitlab` (will add `gitlab.yml`)
+- `--skipTpl`: If there is no `src` folder in your project root. Then it will create some template files (as well as a tests directory with a test file in it). If you pass this option then it will skip this step entirely.
+
+## Credits
+
+The idea is based on this [blog post](https://www.metachris.com/2021/04/starting-a-typescript-project-in-2021/#:~:text=In%20tsconfig.json%2C%20add%20DOM%20to%20the%20list%20of,can%20attach%20custom%20properties%20to%20window%20like%20this%3A)
+
+## TODOS
+
+- ~~Add options to add github / gitlab CI actions~~
+- ~~Option to setup postCSS and browser env~~ (this will be in another package)
+- Add serverless CI option
+- for ava.js, work out a way to use `esbuild` instead of `node-ts/register` (just like using `esm`)
 
 
-#### Gitee Feature
+---
 
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+Joel Chu (c) 2021

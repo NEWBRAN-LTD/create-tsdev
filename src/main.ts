@@ -5,16 +5,18 @@ import {
   changeAndGetPkg,
   copyProps,
   overwritePkgJson,
-  runInstall
+  runInstall,
+  installAction,
+  setupTpl
 } from './lib'
 
 /**
  * Top level API
- * @param {Array<any>} _args from process.argv
- * @return {void}
+ * @param {Object} _args from process.argv could use the type but it will be pointless
+ * @return {Promise<any>}
  * @public
  */
-export async function main(_args: Array<any>) {
+export async function main(_args: any): Promise<any> {
   // there is no point of accepting input anyway
   return processArg(_args)
     .then(args => {
@@ -23,8 +25,12 @@ export async function main(_args: Array<any>) {
 
       return { args, pkg, pkgFile }
     })
-    .then(({ args, pkg, pkgFile }) => (
+    .then( ({ args, pkg, pkgFile }) => (
       overwritePkgJson(pkgFile, pkg)
-        .then(() => runInstall(args))
+        .then(() => args)
     ))
+    // not ideal if the action fail then the next will not run
+    .then(args => installAction(args))
+    .then(args => setupTpl(args))
+    .then(args => runInstall(args))
 }

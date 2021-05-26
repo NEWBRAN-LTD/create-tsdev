@@ -25,9 +25,11 @@ test.after(() => {
 
 test(`Expect to able to get the right properties`, async t => {
   const p = '/home/joel/Projects/create-t1sts'
-  const result = await processArg(['_', '_', '--to', p])
+  const result = await processArg({to: p, skipInstall: true, action: 'somethingelse', skipTpl: true})
 
   t.is(result.to, p)
+  t.true(result.skipTpl)
+  t.falsy(result.action)
 })
 
 test(`Expect to fail if there is no package.json`, t => {
