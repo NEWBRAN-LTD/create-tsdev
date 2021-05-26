@@ -34,7 +34,7 @@ The idea is based on this [blog post](https://www.metachris.com/2021/04/starting
 - ~~Add options to add github / gitlab CI actions~~
 - ~~Option to setup postCSS and browser env~~ (this will be in another package)
 - Add serverless CI option
-- for ava.js, work out a way to use `esbuild` instead of `node-ts/register` (just like using `esm`)
+- ~~for ava.js, work out a way to use `esbuild` instead of `node-ts/register` (just like using `esm`)~~ now using [esbuild-register](https://github.com/egoist/esbuild-register)
 
 
 ---
