@@ -20,7 +20,7 @@ export { CustomError }
 
 /**
  * @param {array} arg -- process.argv
- * @return {promise} resolve nothing
+ * @return {promise} resolve <configObjType>
  */
 export async function processArg(argv: any): Promise<configObjType> {
   return Promise.resolve(argv)
@@ -130,7 +130,7 @@ export function runInstall(args: any): Promise<any> {
  * @param {object} args from cli
  * @return {promise} true on success
  */
-export function installAction(args: any): Promise<configObjType> {
+export async function installAction(args: any): Promise<configObjType> {
     const _act = args.action
     if (_act && _act !== PLACEHOLDER) {
       const ymlFile = join(__dirname, 'actions', [_act, YML_EXT].join('.'))
@@ -150,10 +150,9 @@ export function installAction(args: any): Promise<configObjType> {
           console.error(`Copy ${_act} ${YML_EXT} failed`, err)
         })
     }
-    // noting to do
-    return Promise.resolve(args)
+    // noting to do, same question as below
+    return args
 }
-
 
 /**
  * To create some start-up template or not
@@ -162,23 +161,31 @@ export function installAction(args: any): Promise<configObjType> {
  * @param {object} args
  * @return {Promise<configObjType>}
  */
-export function setupTpl(args: any): Promise<configObjType> {
+export async function setupTpl(args: any): Promise<configObjType> {
+  const projectDir = process.cwd()
+  const files = [
+    [join(__dirname, '..', 'clean.js'), join(projectDir, 'clean.js')]
+  ]
   if (args.skipTpl !== true) {
-    const projectDir = process.cwd()
     const tplDir = join(__dirname, 'tpl')
     const srcDir = join(projectDir, 'src')
     if (!fsx.existsSync(srcDir)) {
-      const files = [
+      files.push(
         [join(tplDir, 'main.tpl'), join(projectDir, 'src' ,'main.ts')],
         [join(tplDir, 'main.test.tpl'), join(projectDir, 'tests', 'main.test.ts')]
-      ]
-
-      return Promise.all(
-        files.map(fileTodo => Reflect.apply(fsx.copy, null, fileTodo))
       )
-      .then(() => args)
     }
   }
 
-  return Promise.resolve(args)
+  return Promise.all(
+    files.map(fileTodo => Reflect.apply(fsx.copy, null, fileTodo))
+  )
+  .then(() => args)
 }
+
+/*
+// just for testing purpose
+export async function dummyFn(): Promise<any> {
+  return 'something'
+}
+*/

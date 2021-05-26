@@ -1,6 +1,6 @@
 {
   "name": "create-tsdev",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
   "files": [
@@ -45,7 +45,9 @@
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
     "ava": "^3.15.0",
+    "aws-v-cli": "^0.2.3",
     "esbuild": "^0.12.0",
+    "esbuild-register": "^2.5.0",
     "eslint": "^7.26.0",
     "ts-node": "^9.1.1",
     "typedoc": "^0.20.36",
@@ -56,7 +58,7 @@
       "ts"
     ],
     "require": [
-      "ts-node/register"
+      "esbuild-register"
     ]
   },
   "dependencies": {
