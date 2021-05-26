@@ -1,4 +1,4 @@
-// main test file
+// lib test file
 import test from 'ava'
 import { copySync, removeSync, readJsonSync, existsSync, ensureDir } from 'fs-extra'
 import { join } from 'path'
@@ -9,7 +9,6 @@ import {
   copyProps,
   setupTpl
 } from '../src/lib'
-
 
 const fixtures: string = join(__dirname, 'fixtures')
 const pkgTpl: string = join(fixtures, 'package-tpl.json')
@@ -29,7 +28,7 @@ test.after(() => {
 })
 
 /*
-// result: IT DOES 
+// result: IT DOES
 test.only(`To see if the async method can return a promise`, t => {
   return dummyFn()
     .then(r => {
