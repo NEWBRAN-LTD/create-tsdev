@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "test": "ava",
+    "test:dist": "ava ./tests/dist.test.js",
     "cli": "node ./index.js",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "build": "tsc -p tsconfig.json",
@@ -55,7 +56,7 @@
   },
   "ava": {
     "extensions": [
-      "ts"
+      "ts", "_js_"
     ],
     "require": [
       "esbuild-register"
