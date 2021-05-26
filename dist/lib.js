@@ -11,7 +11,7 @@ Object.defineProperty(exports, "CustomError", { enumerable: true, get: function 
 const constants_1 = require("./constants");
 /**
  * @param {array} arg -- process.argv
- * @return {promise} resolve nothing
+ * @return {promise} resolve <configObjType>
  */
 function processArg(argv) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -116,25 +116,27 @@ exports.runInstall = runInstall;
  * @return {promise} true on success
  */
 function installAction(args) {
-    const _act = args.action;
-    if (_act && _act !== constants_1.PLACEHOLDER) {
-        const ymlFile = path_1.join(__dirname, 'actions', [_act, constants_1.YML_EXT].join('.'));
-        const dest = path_1.join(process.cwd(), constants_1.ACTION_MAP[_act]);
-        // stupid hack
-        if (_act === 'github') {
-            fs_extra_1.default.ensureDir(path_1.dirname(dest));
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        const _act = args.action;
+        if (_act && _act !== constants_1.PLACEHOLDER) {
+            const ymlFile = path_1.join(__dirname, 'actions', [_act, constants_1.YML_EXT].join('.'));
+            const dest = path_1.join(process.cwd(), constants_1.ACTION_MAP[_act]);
+            // stupid hack
+            if (_act === 'github') {
+                fs_extra_1.default.ensureDir(path_1.dirname(dest));
+            }
+            return fs_extra_1.default.copy(ymlFile, dest)
+                .then(() => {
+                console.log(`${_act} ${constants_1.YML_EXT} install to ${dest}`);
+                return args;
+            })
+                .catch(err => {
+                console.error(`Copy ${_act} ${constants_1.YML_EXT} failed`, err);
+            });
         }
-        return fs_extra_1.default.copy(ymlFile, dest)
-            .then(() => {
-            console.log(`${_act} ${constants_1.YML_EXT} install to ${dest}`);
-            return args;
-        })
-            .catch(err => {
-            console.error(`Copy ${_act} ${constants_1.YML_EXT} failed`, err);
-        });
-    }
-    // noting to do
-    return Promise.resolve(args);
+        // noting to do, same question as below
+        return args;
+    });
 }
 exports.installAction = installAction;
 /**
@@ -145,20 +147,27 @@ exports.installAction = installAction;
  * @return {Promise<configObjType>}
  */
 function setupTpl(args) {
-    if (args.skipTpl !== true) {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const projectDir = process.cwd();
-        const tplDir = path_1.join(__dirname, 'tpl');
-        const srcDir = path_1.join(projectDir, 'src');
-        if (!fs_extra_1.default.existsSync(srcDir)) {
-            const files = [
-                [path_1.join(tplDir, 'main.tpl'), path_1.join(projectDir, 'src', 'main.ts')],
-                [path_1.join(tplDir, 'main.test.tpl'), path_1.join(projectDir, 'tests', 'main.test.ts')]
-            ];
-            return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.default.copy, null, fileTodo)))
-                .then(() => args);
+        const files = [
+            [path_1.join(__dirname, '..', 'clean.js'), path_1.join(projectDir, 'clean.js')]
+        ];
+        if (args.skipTpl !== true) {
+            const tplDir = path_1.join(__dirname, 'tpl');
+            const srcDir = path_1.join(projectDir, 'src');
+            if (!fs_extra_1.default.existsSync(srcDir)) {
+                files.push([path_1.join(tplDir, 'main.tpl'), path_1.join(projectDir, 'src', 'main.ts')], [path_1.join(tplDir, 'main.test.tpl'), path_1.join(projectDir, 'tests', 'main.test.ts')]);
+            }
         }
-    }
-    return Promise.resolve(args);
+        return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.default.copy, null, fileTodo)))
+            .then(() => args);
+    });
 }
 exports.setupTpl = setupTpl;
+/*
+// just for testing purpose
+export async function dummyFn(): Promise<any> {
+  return 'something'
+}
+*/
 //# sourceMappingURL=lib.js.map

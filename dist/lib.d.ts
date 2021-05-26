@@ -3,7 +3,7 @@ import { configObjType } from './constants';
 export { CustomError };
 /**
  * @param {array} arg -- process.argv
- * @return {promise} resolve nothing
+ * @return {promise} resolve <configObjType>
  */
 export declare function processArg(argv: any): Promise<configObjType>;
 /**
