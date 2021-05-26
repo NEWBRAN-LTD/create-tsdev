@@ -1,6 +1,6 @@
 {
   "name": "create-tsdev",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
   "files": [
@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "test": "ava",
+    "test:dist": "ava ./tests/dist.test.js",
     "cli": "node ./index.js",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "build": "tsc -p tsconfig.json",
