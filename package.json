@@ -54,7 +54,7 @@
     "typedoc": "^0.20.36",
     "typescript": "^4.2.4"
   },
-  "ava": {
+  "_ava": {
     "extensions": [
       "ts", "_js_"
     ],
