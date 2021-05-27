@@ -164,4 +164,3 @@ function setupTpl(args) {
     });
 }
 exports.setupTpl = setupTpl;
-//# sourceMappingURL=lib.js.map

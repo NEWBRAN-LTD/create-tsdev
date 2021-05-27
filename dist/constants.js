@@ -18,4 +18,3 @@ exports.DEFAULT_OPTIONS = {
     skipTpl: false,
     action: exports.PLACEHOLDER
 };
-//# sourceMappingURL=constants.js.map
