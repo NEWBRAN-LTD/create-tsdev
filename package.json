@@ -1,6 +1,6 @@
 {
   "name": "create-tsdev",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
   "files": [
@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "fs-extra": "^10.0.0",
+    "tslib": "^1.14.1",
     "yargs": "^16.2.0"
   }
 }
