@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 // lib.ts libraries of functions
 const path_1 = require("path");
 const child_process_1 = require("child_process");
-const fs_extra_1 = tslib_1.__importDefault(require("fs-extra"));
+const fs_extra_1 = require("fs-extra");
 const custom_error_1 = require("./custom-error");
 Object.defineProperty(exports, "CustomError", { enumerable: true, get: function () { return custom_error_1.CustomError; } });
 const constants_1 = require("./constants");
@@ -40,14 +40,14 @@ exports.processArg = processArg;
  * @return {array} [ pkgFile, json ]
  */
 function changeAndGetPkg(where) {
-    if (fs_extra_1.default.existsSync(where)) {
+    if (fs_extra_1.existsSync(where)) {
         process.chdir(where);
         const pkgFile = path_1.join(where, constants_1.PKG_FILE);
-        if (fs_extra_1.default.existsSync(pkgFile)) {
+        if (fs_extra_1.existsSync(pkgFile)) {
             // return a tuple instead
             return [
                 pkgFile,
-                fs_extra_1.default.readJsonSync(pkgFile)
+                fs_extra_1.readJsonSync(pkgFile)
             ];
         }
     }
@@ -62,7 +62,7 @@ exports.changeAndGetPkg = changeAndGetPkg;
  */
 function copyProps(pkg) {
     const pathToPkg = path_1.resolve(__dirname, '..', constants_1.PKG_FILE);
-    const myPkg = fs_extra_1.default.readJsonSync(pathToPkg);
+    const myPkg = fs_extra_1.readJsonSync(pathToPkg);
     // first merge the Dependencies
     pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies);
     pkg.devDependencies = Object.assign(pkg.devDependencies || {}, myPkg.devDependencies);
@@ -80,7 +80,7 @@ exports.copyProps = copyProps;
  * @return {promise} not throw error that means success
  */
 function overwritePkgJson(pkgFile, pkg) {
-    return fs_extra_1.default.writeJson(pkgFile, pkg, { spaces: 2 });
+    return fs_extra_1.writeJson(pkgFile, pkg, { spaces: 2 });
 }
 exports.overwritePkgJson = overwritePkgJson;
 /**
@@ -123,9 +123,9 @@ function installAction(args) {
             const dest = path_1.join(process.cwd(), constants_1.ACTION_MAP[_act]);
             // stupid hack
             if (_act === 'github') {
-                fs_extra_1.default.ensureDir(path_1.dirname(dest));
+                fs_extra_1.ensureDir(path_1.dirname(dest));
             }
-            return fs_extra_1.default.copy(ymlFile, dest)
+            return fs_extra_1.copy(ymlFile, dest)
                 .then(() => {
                 console.log(`${_act} ${constants_1.YML_EXT} install to ${dest}`);
                 return args;
@@ -155,19 +155,13 @@ function setupTpl(args) {
         if (args.skipTpl !== true) {
             const tplDir = path_1.join(__dirname, 'tpl');
             const srcDir = path_1.join(projectDir, 'src');
-            if (!fs_extra_1.default.existsSync(srcDir)) {
+            if (!fs_extra_1.existsSync(srcDir)) {
                 files.push([path_1.join(tplDir, 'main.tpl'), path_1.join(projectDir, 'src', 'main.ts')], [path_1.join(tplDir, 'main.test.tpl'), path_1.join(projectDir, 'tests', 'main.test.ts')]);
             }
         }
-        return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.default.copy, null, fileTodo)))
+        return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.copy, null, fileTodo)))
             .then(() => args);
     });
 }
 exports.setupTpl = setupTpl;
-/*
-// just for testing purpose
-export async function dummyFn(): Promise<any> {
-  return 'something'
-}
-*/
 //# sourceMappingURL=lib.js.map
