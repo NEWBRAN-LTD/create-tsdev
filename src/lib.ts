@@ -1,7 +1,13 @@
 // lib.ts libraries of functions
 import { join, resolve, dirname } from 'path'
 import { exec } from 'child_process'
-import fsx from 'fs-extra'
+import {
+  copy,
+  ensureDir,
+  existsSync,
+  readJsonSync,
+  writeJson
+} from 'fs-extra'
 import { CustomError } from './custom-error'
 import {
   PLACEHOLDER,
@@ -50,15 +56,15 @@ export async function processArg(argv: any): Promise<configObjType> {
  * @return {array} [ pkgFile, json ]
  */
 export function changeAndGetPkg(where: string): any {
-  if (fsx.existsSync(where)) {
+  if (existsSync(where)) {
     process.chdir(where)
     const pkgFile = join(where, PKG_FILE)
 
-    if (fsx.existsSync(pkgFile)) {
+    if (existsSync(pkgFile)) {
       // return a tuple instead
       return [
         pkgFile,
-        fsx.readJsonSync(pkgFile)
+        readJsonSync(pkgFile)
       ]
     }
   }
@@ -73,7 +79,7 @@ export function changeAndGetPkg(where: string): any {
  */
 export function copyProps(pkg: any): any {
   const pathToPkg = resolve(__dirname, '..', PKG_FILE)
-  const myPkg = fsx.readJsonSync(pathToPkg)
+  const myPkg = readJsonSync(pathToPkg)
   // first merge the Dependencies
   pkg.dependencies = Object.assign(pkg.dependencies || {}, myPkg.dependencies)
   pkg.devDependencies = Object.assign(pkg.devDependencies || {}, myPkg.devDependencies)
@@ -94,7 +100,7 @@ export function copyProps(pkg: any): any {
  * @return {promise} not throw error that means success
  */
 export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
-  return fsx.writeJson(pkgFile, pkg, {spaces: 2})
+  return writeJson(pkgFile, pkg, {spaces: 2})
 }
 
 /**
@@ -138,10 +144,10 @@ export async function installAction(args: any): Promise<configObjType> {
 
       // stupid hack
       if (_act === 'github') {
-        fsx.ensureDir(dirname(dest))
+        ensureDir(dirname(dest))
       }
 
-      return fsx.copy(ymlFile, dest)
+      return copy(ymlFile, dest)
         .then(() => {
           console.log(`${_act} ${YML_EXT} install to ${dest}`)
           return args
@@ -169,7 +175,7 @@ export async function setupTpl(args: any): Promise<configObjType> {
   if (args.skipTpl !== true) {
     const tplDir = join(__dirname, 'tpl')
     const srcDir = join(projectDir, 'src')
-    if (!fsx.existsSync(srcDir)) {
+    if (!existsSync(srcDir)) {
       files.push(
         [join(tplDir, 'main.tpl'), join(projectDir, 'src' ,'main.ts')],
         [join(tplDir, 'main.test.tpl'), join(projectDir, 'tests', 'main.test.ts')]
@@ -178,14 +184,7 @@ export async function setupTpl(args: any): Promise<configObjType> {
   }
 
   return Promise.all(
-    files.map(fileTodo => Reflect.apply(fsx.copy, null, fileTodo))
+    files.map(fileTodo => Reflect.apply(copy, null, fileTodo))
   )
   .then(() => args)
 }
-
-/*
-// just for testing purpose
-export async function dummyFn(): Promise<any> {
-  return 'something'
-}
-*/

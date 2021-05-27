@@ -28,4 +28,3 @@ function main(_args) {
     });
 }
 exports.main = main;
-//# sourceMappingURL=main.js.map
