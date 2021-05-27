@@ -1,0 +1,12 @@
+{
+  "description": "things need to get install, and config to package.json etc",
+  "npm": {
+    "install": [
+      "koa koa-{router,bodyparser} http-status-codes typeorm pg reflect-metadata"
+    ],
+    "install -D": [
+      "tslint tslint-config-airbnb nodemon",
+      "@types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
+    ]
+  }
+}
