@@ -35,7 +35,13 @@ The idea is based on this [blog post](https://www.metachris.com/2021/04/starting
 - ~~Option to setup postCSS and browser env~~ (this will be in another package)
 - ~~Add serverless CI option (added in 0.3.0)~~
 - ~~for ava.js, work out a way to use `esbuild` instead of `node-ts/register` (just like using `esm`)~~ (v0.5.0) using [esbuild-register](https://github.com/egoist/esbuild-register)
+- AWS template
+- Other Server side dev templates 
 
+## TS Stupidity
+
+TS actually couldn't handle many of the things it claim it does. You have to rely on yet-another-external-lib to do that for you, and
+TS won't ship it. Therefore you need to add `tslib` as a dependencies!
 
 ---
 
