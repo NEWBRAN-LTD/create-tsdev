@@ -5,7 +5,7 @@
       "koa koa-{router,bodyparser} http-status-codes typeorm pg reflect-metadata"
     ],
     "install -D": [
-      "tslint tslint-config-airbnb nodemon",
+      "nodemon",
       "@types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
     ]
   }
