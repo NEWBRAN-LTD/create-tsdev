@@ -1,4 +1,9 @@
 // src/template.ts
+import { resolve, join } from 'path'
+import { copy, ensureDir } from 'fs-extra'
+
+const baseDir = resolve(__dirname, 'tpl')
+
 /**
  * This will handle all sort of different template action
  * This will be the last method to get all in the chain
@@ -18,12 +23,20 @@ async function createTemplate(name: string): Promise<any> {
   }
 }
 
+const koaBaseDir: string = join(baseDir, 'koa')
+const koaTemplates: Array<string> = [
+  'server.ts',
+  'router.ts'
+]
+
+
 
 /**
  * handle the koa template
- *
+ * @param {string} [withDb='none'] for future development if they want db template or not
+ * @return {Promise<any>} should be just true / false
  */
-async function koa(): Promise<any> {
-  
+async function koa(withDb: string = 'none'): Promise<any> {
+  // first copy the taget files
 
 }

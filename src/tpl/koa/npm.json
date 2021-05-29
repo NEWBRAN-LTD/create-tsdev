@@ -2,12 +2,19 @@
   "description": "things need to get install, and config to package.json etc",
   "npm": {
     "install": [
-      "koa koa-{router,bodyparser} http-status-codes typeorm reflect-metadata",
-      "pg"
+      "koa koa-{router,bodyparser} http-status-codes",
+      "pg typeorm reflect-metadata"
     ],
     "install -D": [
       "nodemon",
       "@types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
     ]
+  },
+  "scripts": {
+    "lint": "tslint --project tsconfig.json --format stylish",
+    "build": "esbuild",
+    "serve": "npm run ts -- src/server.ts",
+    "start": "nodemon",
+    "ts": "node -r esbuild-register"
   }
 }
