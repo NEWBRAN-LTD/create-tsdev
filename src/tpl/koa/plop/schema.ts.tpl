@@ -1,0 +1,1 @@
+// stock typeorm schema template 
