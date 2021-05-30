@@ -7,8 +7,9 @@ const routerOpts: Router.IRouterOptions = {
   prefix: '/endpoint',
 }
 
-const router: Router = new Router(routerOpts);
+const router: Router = new Router(routerOpts)
 
+// just take what you need 
 router.get('/', async (ctx:Koa.Context) => {
   ctx.body = 'GET ALL'
 })

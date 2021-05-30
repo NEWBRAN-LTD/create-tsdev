@@ -1,14 +1,12 @@
 {
   "description": "things need to get install, and config to package.json etc",
-  "npm": {
-    "install": [
-      "koa koa-{router,bodyparser} http-status-codes",
-      "pg typeorm reflect-metadata"
-    ],
-    "install -D": [
-      "nodemon",
-      "@types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
-    ]
+  "npm": [
+    "install koa koa-{router,bodyparser} http-status-codes",
+    "install --save-dev nodemon @types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
+  ],
+  "database": {
+    "desc": "NOT_IN_USE",
+    "pg": "pg typeorm reflect-metadata"
   },
   "scripts": {
     "lint": "tslint --project tsconfig.json --format stylish",

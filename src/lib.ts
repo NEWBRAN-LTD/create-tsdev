@@ -172,6 +172,8 @@ export async function setupTpl(args: any): Promise<configObjType> {
   const files = [
     [join(__dirname, '..', 'clean.js'), join(projectDir, 'clean.js')]
   ]
+  // from here we need to change if the user use --tpl koa|aws
+  
   if (args.skipTpl !== true) {
     const tplDir = join(__dirname, 'tpl')
     const srcDir = join(projectDir, 'src')
