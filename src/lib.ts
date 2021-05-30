@@ -1,6 +1,5 @@
 // lib.ts libraries of functions
 import { join, resolve, dirname } from 'path'
-import { exec } from 'child_process'
 import {
   copy,
   ensureDir,
@@ -18,14 +17,17 @@ import {
   ACTION_MAP,
   YML_EXT,
   DEFAULT_OPTIONS,
+  TPL_NAME,
+  TEMPLATES
   configObjType
 } from './constants'
-import { execp, overwritePkgJson } from './util'
+import { execp, overwritePkgJson, checkExist } from './util'
 import { createTemplate } from './template'
 // re-export
 export { CustomError }
 
 /**
+ * processing the command line input
  * @param {array} arg -- process.argv
  * @return {promise} resolve <configObjType>
  */
@@ -39,9 +41,15 @@ export async function processArg(argv: any): Promise<configObjType> {
           const check = argv[key] !== undefined
           // need to check this one
           if (check && key === ACTION_NAME) {
-            const find = ACTIONS.filter(a => a === args[key].toLowerCase())
-
-            return find.length > 0
+            const arg = args[key]
+            switch (key) {
+              case ACTION_NAME:
+                return checkExist(ACTIONS, arg)
+              case TPL_NAME:
+                return checkExist(TEMPLATES, arg)
+              default:
+                return false
+            }
           }
 
           return check

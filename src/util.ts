@@ -1,6 +1,18 @@
 // src/util.ts
 import { writeJson } from 'fs-extra'
 import { exec } from 'child_process'
+
+
+/**
+ * check if that exist in the predefined array of values
+ * @param {array} arr
+ * @param {string} arg  
+ * @return {boolean}
+ */
+export function checkExist(arr: array, arg: string): boolean {
+  return arr.filter(a => a === arg.toLowerCase()).length > 0
+}
+
 // lots of little method that get share betwen
 // so I put them all here
 /**

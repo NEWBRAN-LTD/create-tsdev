@@ -3,11 +3,18 @@ import { resolve, join } from 'path'
 import { copy, ensureDir, readJsonSync, writeJson } from 'fs-extra'
 import { exec } from 'child_process'
 
+import { PKG_FILE, PLACEHOLDER } from './constants'
+
 const baseDir = resolve(__dirname, 'tpl')
 
+const cliBaseDir: string = join(baseDir, 'cli')
 const koaBaseDir: string = join(baseDir, 'koa')
+const awsBaseDir: string = join(baseDir, 'aws')
+
 const destRoot: string = process.cwd()
-const destDir: string = join(destRoot, 'src')
+const destSrc: string = join(destRoot, 'src')
+const destTest: string = join(destRoot, 'tests')
+
 const koaTemplates: Array<string> = [
   'app.ts',
   'server.ts',
@@ -16,20 +23,19 @@ const koaTemplates: Array<string> = [
 const configTpl: Array<string> = [
   'tsconfig.json'
 ]
-const destPkgJson: string = join(destRoot, 'package.json')
+const destPkgJson: string = join(destRoot, PKG_FILE)
 const npmTodo: string = 'npm.json'
-
-
 
 /**
  * handle the koa template
+ * @TODO this should turn into a factory method for all the different templates
  * @param {string} [withDb='none'] for future development if they want db template or not
  * @return {Promise<any>} should be just true / false
  */
 async function koa(withDb: string = 'none'): Promise<any> {
   // first copy the taget files
   return Promise.all(
-      koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destDir, tpl)))
+      koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, tpl)))
         .concat(configTpl.map(tpl => copy(join(koaBaseDir, tpl), destRoot)))
     )
     .then(() => {
@@ -58,22 +64,18 @@ async function koa(withDb: string = 'none'): Promise<any> {
  * @param {object} args
  * @return {Promise<configObjType>}
  */
-async function processTemplate(args: any): Promise<any> {
-  const projectDir = process.cwd()
+async function processBaseTemplate(args: any): Promise<any> {
+  // this will get copy over no matter what
   const files = [
-    [join(__dirname, '..', 'clean.js'), join(projectDir, 'clean.js')]
+    [join(__dirname, '..', 'clean.js'), join(destRoot, 'clean.js')]
   ]
   // from here we need to change if the user use --tpl koa|aws
-
-  if (args.skipTpl !== true) {
-    const tplDir = join(__dirname, 'tpl')
-    const srcDir = join(projectDir, 'src')
-    if (!existsSync(srcDir)) {
-      files.push(
-        [join(tplDir, 'main.tpl'), join(projectDir, 'src' ,'main.ts')],
-        [join(tplDir, 'main.test.tpl'), join(projectDir, 'tests', 'main.test.ts')]
-      )
-    }
+  // we combine the tpl here and not using the skipInstall anymore
+  if (args.tpl === 'cli' && !existsSync(destSrc)) {
+    files.push(
+      [join(cliBaseDir, 'main.tpl'), join(destSrc ,'main.ts')],
+      [join(cliBaseDir, 'main.test.tpl'), join(destTest, 'main.test.ts')]
+    )
   }
 
   return Promise.all(
@@ -81,8 +83,6 @@ async function processTemplate(args: any): Promise<any> {
   )
   .then(() => args)
 }
-
-
 
 /**
  * This will handle all sort of different template action
@@ -103,7 +103,16 @@ async function createTemplate(name: string): Promise<any> {
   }
 }
 
-
+/**
+ * The only export method, it also does the install here and skip the next call
+ * @param {object} args from the command line options
+ * @return {Promise<any>}
+ */
 export async function setupTpl(args: any): Promise<any> {
 
+
+
+  return processTemplate(args)
+    .then(args => createTemplate(args.tpl))
+    .then()
 }
