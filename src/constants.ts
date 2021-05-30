@@ -3,6 +3,7 @@
 export const PLACEHOLDER: string = '__PLACEHOLDER__'
 export const ACTION_NAME: string = 'action'
 export const TPL_NAME: string = 'tpl'
+export const CLI_NAME: string = 'cli'
 export const PKG_FILE: string = 'package.json'
 
 export const ACTIONS: Array<string> = ['github', 'gitlab']

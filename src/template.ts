@@ -3,7 +3,11 @@ import { resolve, join } from 'path'
 import { copy, ensureDir, readJsonSync, writeJson } from 'fs-extra'
 import { exec } from 'child_process'
 
-import { PKG_FILE, PLACEHOLDER } from './constants'
+import {
+  PKG_FILE,
+  PLACEHOLDER,
+  CLI_NAME
+} from './constants'
 
 const baseDir = resolve(__dirname, 'tpl')
 
@@ -71,7 +75,7 @@ async function processBaseTemplate(args: any): Promise<any> {
   ]
   // from here we need to change if the user use --tpl koa|aws
   // we combine the tpl here and not using the skipInstall anymore
-  if (args.tpl === 'cli' && !existsSync(destSrc)) {
+  if (args.tpl === CLI_NAME && !existsSync(destSrc)) {
     files.push(
       [join(cliBaseDir, 'main.tpl'), join(destSrc ,'main.ts')],
       [join(cliBaseDir, 'main.test.tpl'), join(destTest, 'main.test.ts')]
@@ -89,12 +93,17 @@ async function processBaseTemplate(args: any): Promise<any> {
  * This will be the last method to get all in the chain
  * This is the top level method then call the other sub method
  * due to different template has it's own settings
- * @param {string} name of the template
+ * @param {*} args of the template
  */
-async function createTemplate(name: string): Promise<any> {
-  switch (name) {
+async function createTemplate(args: any): Promise<any> {
+  const { tpl } = args
+  if (tpl === CLI_NAME) {
+    return Promise.resolve(args)
+  }
+  switch (tpl) {
     case 'koa':
-        return koa()
+        args.skipInstall = true // make sure the final install not going to happen
+        return koa(args)
       break;
     case 'aws':
     default:
@@ -110,9 +119,6 @@ async function createTemplate(name: string): Promise<any> {
  */
 export async function setupTpl(args: any): Promise<any> {
 
-
-
   return processTemplate(args)
-    .then(args => createTemplate(args.tpl))
-    .then()
+    .then(args => createTemplate(args))
 }
