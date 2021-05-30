@@ -15,6 +15,8 @@ export const ACTION_MAP: any = {
   gitlab: ".gitlab-ci.yml"
 }
 export const YML_EXT = 'yml'
+export const TPL_EXT = '.tpl'
+
 
 export const DEFAULT_OPTIONS = {
   to: PLACEHOLDER,

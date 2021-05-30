@@ -1,14 +1,14 @@
 // src/util.ts
 import { writeJson } from 'fs-extra'
 import { exec } from 'child_process'
-
+import { TPL_EXT } from './constants'
 /**
  * Take the tpl ext off from path
  * @param {string} tpl
  * @return {string}
  */
-export function removeTpl(tpl: string): string {
-  return str.replace('.tpl', '')
+export function removeTpl(str: string): string {
+  return str.replace(TPL_EXT, '')
 }
 
 /**

@@ -1,7 +1,7 @@
 // src/template.ts
 import { resolve, join } from 'path'
 import { copy, readJsonSync, existsSync } from 'fs-extra'
-import { execp, overwritePkgJson } from './util'
+import { execp, overwritePkgJson, removeTpl } from './util'
 
 import {
   PKG_FILE,
@@ -26,7 +26,9 @@ const koaTemplates: Array<string> = [
 const configTpl: Array<string> = [
   'tsconfig.json'
 ]
-
+const testTpl: Array<string> = [
+  'server.test.ts.tpl'
+]
 
 const npmTodo: string = 'npm.json'
 
@@ -57,10 +59,12 @@ async function koa(args: any): Promise<any> {
 
   // first copy the taget files
   return Promise.all(
-      koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, tpl)))
+      koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, removeTpl(tpl) )))
         .concat(
-          configTpl.map(tpl => copy(join(koaBaseDir, tpl), join(destRoot, tpl)))
-            .concat([copy(join(koaBaseDir, 'server.test.tpl'), join(destTest, 'server.test.ts'))])
+          configTpl.map(tpl => copy(join(koaBaseDir, tpl), join(destRoot, removeTpl(tpl)) ))
+            .concat(
+              testTpl.map(tpl => copy(join(koaBaseDir, tpl), join(destTest, removeTpl(tpl))))
+            )
         )
     )
     .then(() => {
@@ -72,7 +76,9 @@ async function koa(args: any): Promise<any> {
       pkgJson.scripts = Object.assign(pkgJson.scripts, npmJson.scripts)
 
       return overwritePkgJson(destPkgJson, pkgJson)
-        .then(() => npmJson)
+        .then(
+          () => npmJson
+        )
     })
     .then(npmJson => {
       if (process.env.NODE_ENV !== 'test') {

@@ -13,14 +13,17 @@ const baseDir = path_1.resolve(__dirname, 'tpl');
 const appRoot = path_1.resolve(__dirname, '..');
 const cliBaseDir = path_1.join(baseDir, 'cli');
 const koaBaseDir = path_1.join(baseDir, 'koa');
-const awsBaseDir = path_1.join(baseDir, 'aws');
+// const awsBaseDir: string = join(baseDir, 'aws')
 const koaTemplates = [
-    'app.ts',
-    'server.ts',
-    'router.ts'
+    'app.ts.tpl',
+    'server.ts.tpl',
+    'router.ts.tpl'
 ];
 const configTpl = [
     'tsconfig.json'
+];
+const testTpl = [
+    'server.test.ts.tpl'
 ];
 const npmTodo = 'npm.json';
 /**
@@ -46,9 +49,9 @@ function koa(args) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const { destRoot, destSrc, destTest, destPkgJson } = getDest();
         // first copy the taget files
-        return Promise.all(koaTemplates.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destSrc, tpl)))
-            .concat(configTpl.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destRoot, tpl)))
-            .concat([fs_extra_1.copy(path_1.join(koaBaseDir, 'server.test.tpl'), path_1.join(destTest, 'server.test.ts'))])))
+        return Promise.all(koaTemplates.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destSrc, util_1.removeTpl(tpl))))
+            .concat(configTpl.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destRoot, util_1.removeTpl(tpl))))
+            .concat(testTpl.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destTest, util_1.removeTpl(tpl)))))))
             .then(() => {
             // next read the npm.json
             const npmJson = fs_extra_1.readJsonSync(path_1.join(koaBaseDir, npmTodo));

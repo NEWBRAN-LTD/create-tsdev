@@ -4,8 +4,7 @@ import {
   copy,
   ensureDir,
   existsSync,
-  readJsonSync,
-  writeJson
+  readJsonSync
 } from 'fs-extra'
 import { CustomError } from './custom-error'
 import {
@@ -21,7 +20,7 @@ import {
   TEMPLATES,
   configObjType
 } from './constants'
-import { execp, overwritePkgJson, checkExist } from './util'
+import { execp, checkExist } from './util'
 // re-export
 export { CustomError }
 

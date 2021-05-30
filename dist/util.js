@@ -1,10 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.execp = exports.overwritePkgJson = exports.checkExist = void 0;
+exports.execp = exports.overwritePkgJson = exports.checkExist = exports.removeTpl = void 0;
 const tslib_1 = require("tslib");
 // src/util.ts
 const fs_extra_1 = require("fs-extra");
 const child_process_1 = require("child_process");
+const constants_1 = require("./constants");
+/**
+ * Take the tpl ext off from path
+ * @param {string} tpl
+ * @return {string}
+ */
+function removeTpl(str) {
+    return str.replace(constants_1.TPL_EXT, '');
+}
+exports.removeTpl = removeTpl;
 /**
  * check if that exist in the predefined array of values
  * @param {array} arr
