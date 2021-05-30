@@ -17,14 +17,16 @@ export const DEFAULT_OPTIONS = {
   to: PLACEHOLDER,
   skipInstall: false,
   skipTpl: false,
-  action: PLACEHOLDER
+  action: PLACEHOLDER,
+  tpl: PLACEHOLDER
 }
-// taking off your trousers to fart 
+// taking off your trousers to fart
 type configObjType = {
   action?: string,
   to?: string,
   skipInstall? : boolean,
-  skipTpl?: boolean
+  skipTpl?: boolean,
+  tpl?: string
 }
 
 export { configObjType }
