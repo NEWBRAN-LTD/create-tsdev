@@ -6,9 +6,13 @@ import {
   copyProps,
   overwritePkgJson,
   runInstall,
-  installAction,
-  setupTpl
+  installAction
 } from './lib'
+
+import {
+  setupTpl
+} from './template'
+
 
 /**
  * Top level API

@@ -20,7 +20,8 @@ import {
   DEFAULT_OPTIONS,
   configObjType
 } from './constants'
-
+import { execp, overwritePkgJson } from './util'
+import { createTemplate } from './template'
 // re-export
 export { CustomError }
 
@@ -93,15 +94,7 @@ export function copyProps(pkg: any): any {
   return pkg
 }
 
-/**
- * just overwrite the existing package.json
- * @param {string} pkgFile path to package.json
- * @param {object} pkg content of the json
- * @return {promise} not throw error that means success
- */
-export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
-  return writeJson(pkgFile, pkg, {spaces: 2})
-}
+
 
 /**
  * Execute a npm install if they didn't supply the --noInstall
@@ -109,26 +102,12 @@ export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
  * @return {promise}
  */
 export function runInstall(args: any): Promise<any> {
-  return new Promise((resolver, rejecter)  => {
-    if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
-      console.log(`running npm install ...`)
-      exec("npm install",
-           {cwd: process.cwd()},
-         (error, stdout, stderr) => {
-           if (error) {
-             console.error(`ERROR:`, error)
-             return rejecter(false)
-           }
-           console.log(`stdout`, stdout)
-           if (stderr) {
-             console.error(`stderr`, stderr)
-           }
-           resolver(true)
-         })
-    } else {
-      resolver(true)
-    }
-  })
+  if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
+
+    return execp("npm install", process.cwd())
+  }
+
+  return Promise.resolve(true)
 }
 
 /**
@@ -141,12 +120,10 @@ export async function installAction(args: any): Promise<configObjType> {
     if (_act && _act !== PLACEHOLDER) {
       const ymlFile = join(__dirname, 'actions', [_act, YML_EXT].join('.'))
       const dest = join(process.cwd(), ACTION_MAP[_act])
-
       // stupid hack
       if (_act === 'github') {
         ensureDir(dirname(dest))
       }
-
       return copy(ymlFile, dest)
         .then(() => {
           console.log(`${_act} ${YML_EXT} install to ${dest}`)
@@ -158,35 +135,4 @@ export async function installAction(args: any): Promise<configObjType> {
     }
     // noting to do, same question as below
     return args
-}
-
-/**
- * To create some start-up template or not
- * 1. If skipTpl === true then no
- * 2. If they already have a ./src folder then no
- * @param {object} args
- * @return {Promise<configObjType>}
- */
-export async function setupTpl(args: any): Promise<configObjType> {
-  const projectDir = process.cwd()
-  const files = [
-    [join(__dirname, '..', 'clean.js'), join(projectDir, 'clean.js')]
-  ]
-  // from here we need to change if the user use --tpl koa|aws
-  
-  if (args.skipTpl !== true) {
-    const tplDir = join(__dirname, 'tpl')
-    const srcDir = join(projectDir, 'src')
-    if (!existsSync(srcDir)) {
-      files.push(
-        [join(tplDir, 'main.tpl'), join(projectDir, 'src' ,'main.ts')],
-        [join(tplDir, 'main.test.tpl'), join(projectDir, 'tests', 'main.test.ts')]
-      )
-    }
-  }
-
-  return Promise.all(
-    files.map(fileTodo => Reflect.apply(copy, null, fileTodo))
-  )
-  .then(() => args)
 }
