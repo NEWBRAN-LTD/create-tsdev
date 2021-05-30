@@ -7,7 +7,7 @@ import {
   installAction
 } from './lib'
 import { overwritePkgJson } from './util'
-import { setupTpl } from './template'
+import { setupTpl, banner } from './template'
 
 /**
  * Top level API
@@ -16,6 +16,7 @@ import { setupTpl } from './template'
  * @public
  */
 export async function main(_args: any): Promise<any> {
+  banner()
   // there is no point of accepting input anyway
   return processArg(_args)
     .then(args => {

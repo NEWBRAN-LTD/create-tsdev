@@ -9,6 +9,8 @@ export const PKG_FILE: string = 'package.json'
 export const ACTIONS: Array<string> = ['github', 'gitlab']
 export const TEMPLATES: Array<string> = ['cli', 'koa'] // @TODO add aws later
 export const TARGET_KEYS: Array<string> =  ["test", "lint", "build", "clean", "ts-node", "docs"]
+export const BASE_FILES: Array<string> = ['clean.js', '.gitignore', '.eslintrc.js']
+
 
 export const ACTION_MAP: any = {
   github: ".github/workflows/lint-and-test.yml",

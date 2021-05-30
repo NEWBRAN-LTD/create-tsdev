@@ -1,7 +1,20 @@
 // src/util.ts
-import { writeJson } from 'fs-extra'
+import { writeJson, readJsonSync } from 'fs-extra'
+import { join } from 'path'
 import { exec } from 'child_process'
-import { TPL_EXT } from './constants'
+import { TPL_EXT, PKG_FILE } from './constants'
+
+/**
+ * just show a banner with version
+ */
+export function banner(): void {
+  const pkg = readJsonSync(join(__dirname, '..', PKG_FILE))
+
+  console.log(`Starting ${pkg.name}@${pkg.version}`)
+}
+
+
+
 /**
  * Take the tpl ext off from path
  * @param {string} tpl

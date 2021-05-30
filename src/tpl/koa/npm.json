@@ -9,7 +9,7 @@
     "pg": "pg typeorm reflect-metadata"
   },
   "scripts": {
-    "lint": "tslint --project tsconfig.json --format stylish",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "build": "esbuild",
     "serve": "npm run ts -- src/server.ts",
     "start": "nodemon",

@@ -5,7 +5,8 @@ import { execp, overwritePkgJson, removeTpl } from './util'
 
 import {
   PKG_FILE,
-  CLI_NAME
+  CLI_NAME,
+  BASE_FILES
 } from './constants'
 // this is potentially a problem because it sets here
 // but when call the chdir it didn't change it
@@ -101,12 +102,12 @@ async function koa(args: any): Promise<any> {
 async function processBaseTemplate(args: any): Promise<any> {
   const { destRoot, destSrc, destTest } = getDest()
   // this will get copy over no matter what
-  const files = [
-    [join(appRoot, 'clean.js'), join(destRoot, 'clean.js')]
-  ]
+  const files = BASE_FILES.map(file => [join(appRoot, file), join(destRoot, file)])
+
   // from here we need to change if the user use --tpl koa|aws
   // we combine the tpl here and not using the skipInstall anymore
   if (args.tpl === CLI_NAME && !existsSync(destSrc)) {
+    console.log(`Install cli template`)
     files.push(
       [join(cliBaseDir, 'main.tpl'), join(destSrc ,'main.ts')],
       [join(cliBaseDir, 'main.test.tpl'), join(destTest, 'main.test.ts')]
@@ -131,6 +132,7 @@ async function createTemplate(args: any): Promise<any> {
 
   switch (tpl) {
     case 'koa':
+        console.log(`Install koa template`)
         args.skipInstall = true // make sure the final install not going to happen
 
         return koa(args)
