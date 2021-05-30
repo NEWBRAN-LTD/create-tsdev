@@ -28,22 +28,11 @@ test.after(() => {
   removeSync(tmp)
 })
 
-/*
-// result: IT DOES
-test.only(`To see if the async method can return a promise`, t => {
-  return dummyFn()
-    .then(r => {
-      t.truthy(r)
-    })
-})
-*/
-
 test(`Expect to able to get the right properties`, async t => {
   const p = '/home/joel/Projects/create-t1sts'
-  const result = await processArg({to: p, skipInstall: true, action: 'somethingelse', skipTpl: true})
+  const result = await processArg({to: p, action: 'somethingelse'})
 
   t.is(result.to, p)
-  t.true(result.skipTpl)
   t.falsy(result.action)
 })
 
@@ -64,11 +53,13 @@ test(`Expect to copy over the necessary properties to the package.json`, t => {
 })
 
 
-test(`Expect to copy over the required tpl files`, async t => {
+test.only(`Expect to copy over the required tpl files`, async t => {
   // move into the tmp directory as pwd
   process.chdir(tmp)
 
-  await setupTpl()
+  console.log(tmp)
+
+  await setupTpl({})
 
   t.true(existsSync(join(tmp, 'clean.js')))
 })

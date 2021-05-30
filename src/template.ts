@@ -8,16 +8,16 @@ import {
   PLACEHOLDER,
   CLI_NAME
 } from './constants'
+// this is potentially a problem because it sets here
+// but when call the chdir it didn't change it
+
 
 const baseDir = resolve(__dirname, 'tpl')
+const appRoot = resolve(__dirname, '..')
 
 const cliBaseDir: string = join(baseDir, 'cli')
 const koaBaseDir: string = join(baseDir, 'koa')
 const awsBaseDir: string = join(baseDir, 'aws')
-
-const destRoot: string = process.cwd()
-const destSrc: string = join(destRoot, 'src')
-const destTest: string = join(destRoot, 'tests')
 
 const koaTemplates: Array<string> = [
   'app.ts',
@@ -27,8 +27,24 @@ const koaTemplates: Array<string> = [
 const configTpl: Array<string> = [
   'tsconfig.json'
 ]
-const destPkgJson: string = join(destRoot, PKG_FILE)
+
 const npmTodo: string = 'npm.json'
+
+/**
+ * bit of hack to get the path where we wanted
+ * @return {*} key value
+ */
+function getDest(): any {
+  const destRoot: string = process.cwd()
+
+  return {
+    destRoot,
+    destSrc: join(destRoot, 'src'),
+    destTest: join(destRoot, 'tests'),
+    destPkgJson: join(destRoot, PKG_FILE)
+  }
+}
+
 
 /**
  * handle the koa template
@@ -37,6 +53,9 @@ const npmTodo: string = 'npm.json'
  * @return {Promise<any>} should be just true / false
  */
 async function koa(withDb: string = 'none'): Promise<any> {
+
+  const { destRoot, destPkgJson } = getDest()
+
   // first copy the taget files
   return Promise.all(
       koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, tpl)))
@@ -69,9 +88,10 @@ async function koa(withDb: string = 'none'): Promise<any> {
  * @return {Promise<configObjType>}
  */
 async function processBaseTemplate(args: any): Promise<any> {
+  const { destRoot, destSrc, destTest } = getDest()
   // this will get copy over no matter what
   const files = [
-    [join(__dirname, '..', 'clean.js'), join(destRoot, 'clean.js')]
+    [join(appRoot, 'clean.js'), join(destRoot, 'clean.js')]
   ]
   // from here we need to change if the user use --tpl koa|aws
   // we combine the tpl here and not using the skipInstall anymore
