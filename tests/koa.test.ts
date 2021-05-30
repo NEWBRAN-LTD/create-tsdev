@@ -44,6 +44,6 @@ test(`Testing with Koa template`, async t => {
   t.true(existsSync(join(to, 'tsconfig.json')), 'if there is tsconfig.json')
 
   // @TODO
-  // t.true(existsSync(join(to, 'tests', 'server.test.ts')), 'if there is a main.test.ts file')
+  t.true(existsSync(join(to, 'tests', 'server.test.ts')), 'if there is a main.test.ts file')
 
 })
