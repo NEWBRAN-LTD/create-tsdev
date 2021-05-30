@@ -18,11 +18,10 @@ import {
   YML_EXT,
   DEFAULT_OPTIONS,
   TPL_NAME,
-  TEMPLATES
+  TEMPLATES,
   configObjType
 } from './constants'
 import { execp, overwritePkgJson, checkExist } from './util'
-import { createTemplate } from './template'
 // re-export
 export { CustomError }
 

@@ -2,7 +2,7 @@
   "description": "things need to get install, and config to package.json etc",
   "npm": [
     "install koa koa-{router,bodyparser} http-status-codes",
-    "install --save-dev nodemon supertest @types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
+    "install --save-dev nodemon superkoa @types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
   ],
   "database": {
     "desc": "NOT_IN_USE",

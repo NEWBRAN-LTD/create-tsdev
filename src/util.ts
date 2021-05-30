@@ -6,7 +6,7 @@ import { exec } from 'child_process'
 /**
  * check if that exist in the predefined array of values
  * @param {array} arr
- * @param {string} arg  
+ * @param {string} arg
  * @return {boolean}
  */
 export function checkExist(arr: array, arg: string): boolean {
@@ -32,7 +32,7 @@ export function overwritePkgJson(pkgFile: string, pkg: any): Promise<any> {
  * @return {promise<any>}
  */
 export async function execp(cmd: string, cwd: string): Promise<any> {
-  return new Promise((resolver, rejecter) {
+  return new Promise((resolver, rejecter) => {
     exec(cmd, { cwd }, (error, stdout, stderr) => {
        if (error) {
          console.error(`ERROR:`, error)

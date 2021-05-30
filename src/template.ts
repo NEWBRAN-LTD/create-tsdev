@@ -1,7 +1,7 @@
 // src/template.ts
 import { resolve, join } from 'path'
 import { copy, ensureDir, readJsonSync, writeJson } from 'fs-extra'
-import { exec } from 'child_process'
+import { execp, overwritePkgJson } from './util'
 
 import {
   PKG_FILE,
@@ -50,7 +50,7 @@ async function koa(withDb: string = 'none'): Promise<any> {
       // just overwrite it
       pkgJson.scripts = Object.assign(pkgJson.scripts, npmJson.scripts)
 
-      return writeJson(destPkgJson, pkgJson, {spaces: 2})
+      return overwritePkgJson(destPkgJson, pkgJson)
         .then(() => npmJson)
     })
     .then(npmJson => {
@@ -117,8 +117,8 @@ async function createTemplate(args: any): Promise<any> {
  * @param {object} args from the command line options
  * @return {Promise<any>}
  */
-export async function setupTpl(args: any): Promise<any> {
+export function setupTpl(args: any): Promise<any> {
 
-  return processTemplate(args)
+  return processBaseTemplate(args)
     .then(args => createTemplate(args))
 }

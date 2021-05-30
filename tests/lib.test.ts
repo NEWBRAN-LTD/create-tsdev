@@ -6,9 +6,10 @@ import {
   processArg,
   changeAndGetPkg,
   CustomError,
-  copyProps,
-  setupTpl
+  copyProps
 } from '../src/lib'
+import { setupTpl } from '../src/template'
+
 
 const fixtures: string = join(__dirname, 'fixtures')
 const pkgTpl: string = join(fixtures, 'package-tpl.json')
@@ -67,7 +68,7 @@ test(`Expect to copy over the required tpl files`, async t => {
   // move into the tmp directory as pwd
   process.chdir(tmp)
 
-  await setupTpl({skipTpl: true})
+  await setupTpl()
 
   t.true(existsSync(join(tmp, 'clean.js')))
 })

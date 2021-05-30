@@ -1,18 +1,13 @@
 // just create a top level main function
-
 import {
   processArg,
   changeAndGetPkg,
   copyProps,
-  overwritePkgJson,
   runInstall,
   installAction
 } from './lib'
-
-import {
-  setupTpl
-} from './template'
-
+import { overwritePkgJson } from './util'
+import { setupTpl } from './template'
 
 /**
  * Top level API

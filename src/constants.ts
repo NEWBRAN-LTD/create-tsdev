@@ -26,8 +26,8 @@ export const DEFAULT_OPTIONS = {
 type configObjType = {
   action?: string,
   to?: string,
-  skipInstall? : boolean,
-  tpl?: string
+  tpl?: string,
+  skipInstall?: boolean
 }
 
 export { configObjType }
