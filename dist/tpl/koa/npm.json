@@ -1,0 +1,18 @@
+{
+  "description": "things need to get install, and config to package.json etc",
+  "npm": [
+    "install koa koa-{router,bodyparser} http-status-codes",
+    "install --save-dev nodemon superkoa @types/{node,koa,koa-router,http-status-codes,koa-bodyparser}"
+  ],
+  "database": {
+    "desc": "NOT_IN_USE",
+    "pg": "pg typeorm reflect-metadata"
+  },
+  "scripts": {
+    "lint": "tslint --project tsconfig.json --format stylish",
+    "build": "esbuild",
+    "serve": "npm run ts -- src/server.ts",
+    "start": "nodemon",
+    "ts": "node -r esbuild-register"
+  }
+}

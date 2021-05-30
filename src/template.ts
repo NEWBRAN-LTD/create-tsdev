@@ -1,11 +1,10 @@
 // src/template.ts
 import { resolve, join } from 'path'
-import { copy, ensureDir, readJsonSync, writeJson, existsSync } from 'fs-extra'
+import { copy, readJsonSync, existsSync } from 'fs-extra'
 import { execp, overwritePkgJson } from './util'
 
 import {
   PKG_FILE,
-  PLACEHOLDER,
   CLI_NAME
 } from './constants'
 // this is potentially a problem because it sets here
@@ -17,12 +16,12 @@ const appRoot = resolve(__dirname, '..')
 
 const cliBaseDir: string = join(baseDir, 'cli')
 const koaBaseDir: string = join(baseDir, 'koa')
-const awsBaseDir: string = join(baseDir, 'aws')
+// const awsBaseDir: string = join(baseDir, 'aws')
 
 const koaTemplates: Array<string> = [
-  'app.ts',
-  'server.ts',
-  'router.ts'
+  'app.ts.tpl',
+  'server.ts.tpl',
+  'router.ts.tpl'
 ]
 const configTpl: Array<string> = [
   'tsconfig.json'

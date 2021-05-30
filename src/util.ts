@@ -2,6 +2,14 @@
 import { writeJson } from 'fs-extra'
 import { exec } from 'child_process'
 
+/**
+ * Take the tpl ext off from path
+ * @param {string} tpl
+ * @return {string}
+ */
+export function removeTpl(tpl: string): string {
+  return str.replace('.tpl', '')
+}
 
 /**
  * check if that exist in the predefined array of values
@@ -9,7 +17,7 @@ import { exec } from 'child_process'
  * @param {string} arg
  * @return {boolean}
  */
-export function checkExist(arr: array, arg: string): boolean {
+export function checkExist(arr: Array<any>, arg: string): boolean {
   return arr.filter(a => a === arg.toLowerCase()).length > 0
 }
 

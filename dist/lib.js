@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setupTpl = exports.installAction = exports.runInstall = exports.overwritePkgJson = exports.copyProps = exports.changeAndGetPkg = exports.processArg = exports.CustomError = void 0;
+exports.installAction = exports.runInstall = exports.copyProps = exports.changeAndGetPkg = exports.processArg = exports.CustomError = void 0;
 const tslib_1 = require("tslib");
 // lib.ts libraries of functions
 const path_1 = require("path");
-const child_process_1 = require("child_process");
 const fs_extra_1 = require("fs-extra");
 const custom_error_1 = require("./custom-error");
 Object.defineProperty(exports, "CustomError", { enumerable: true, get: function () { return custom_error_1.CustomError; } });
 const constants_1 = require("./constants");
+const util_1 = require("./util");
 /**
+ * processing the command line input
  * @param {array} arg -- process.argv
  * @return {promise} resolve <configObjType>
  */
@@ -23,8 +24,15 @@ function processArg(argv) {
                 const check = argv[key] !== undefined;
                 // need to check this one
                 if (check && key === constants_1.ACTION_NAME) {
-                    const find = constants_1.ACTIONS.filter(a => a === args[key].toLowerCase());
-                    return find.length > 0;
+                    const arg = args[key];
+                    switch (key) {
+                        case constants_1.ACTION_NAME:
+                            return util_1.checkExist(constants_1.ACTIONS, arg);
+                        case constants_1.TPL_NAME:
+                            return util_1.checkExist(constants_1.TEMPLATES, arg);
+                        default:
+                            return false;
+                    }
                 }
                 return check;
             })
@@ -74,40 +82,15 @@ function copyProps(pkg) {
 }
 exports.copyProps = copyProps;
 /**
- * just overwrite the existing package.json
- * @param {string} pkgFile path to package.json
- * @param {object} pkg content of the json
- * @return {promise} not throw error that means success
- */
-function overwritePkgJson(pkgFile, pkg) {
-    return fs_extra_1.writeJson(pkgFile, pkg, { spaces: 2 });
-}
-exports.overwritePkgJson = overwritePkgJson;
-/**
  * Execute a npm install if they didn't supply the --noInstall
  * @param {object} args from command line
  * @return {promise}
  */
 function runInstall(args) {
-    return new Promise((resolver, rejecter) => {
-        if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
-            console.log(`running npm install ...`);
-            child_process_1.exec("npm install", { cwd: process.cwd() }, (error, stdout, stderr) => {
-                if (error) {
-                    console.error(`ERROR:`, error);
-                    return rejecter(false);
-                }
-                console.log(`stdout`, stdout);
-                if (stderr) {
-                    console.error(`stderr`, stderr);
-                }
-                resolver(true);
-            });
-        }
-        else {
-            resolver(true);
-        }
-    });
+    if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
+        return util_1.execp("npm install", process.cwd());
+    }
+    return Promise.resolve(true);
 }
 exports.runInstall = runInstall;
 /**
@@ -139,28 +122,3 @@ function installAction(args) {
     });
 }
 exports.installAction = installAction;
-/**
- * To create some start-up template or not
- * 1. If skipTpl === true then no
- * 2. If they already have a ./src folder then no
- * @param {object} args
- * @return {Promise<configObjType>}
- */
-function setupTpl(args) {
-    return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        const projectDir = process.cwd();
-        const files = [
-            [path_1.join(__dirname, '..', 'clean.js'), path_1.join(projectDir, 'clean.js')]
-        ];
-        if (args.skipTpl !== true) {
-            const tplDir = path_1.join(__dirname, 'tpl');
-            const srcDir = path_1.join(projectDir, 'src');
-            if (!fs_extra_1.existsSync(srcDir)) {
-                files.push([path_1.join(tplDir, 'main.tpl'), path_1.join(projectDir, 'src', 'main.ts')], [path_1.join(tplDir, 'main.test.tpl'), path_1.join(projectDir, 'tests', 'main.test.ts')]);
-            }
-        }
-        return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.copy, null, fileTodo)))
-            .then(() => args);
-    });
-}
-exports.setupTpl = setupTpl;
