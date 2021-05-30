@@ -28,6 +28,7 @@ const configTpl: Array<string> = [
   'tsconfig.json'
 ]
 
+
 const npmTodo: string = 'npm.json'
 
 /**
@@ -60,6 +61,7 @@ async function koa(args: any): Promise<any> {
       koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, tpl)))
         .concat(
           configTpl.map(tpl => copy(join(koaBaseDir, tpl), join(destRoot, tpl)))
+            .concat([copy(join(koaBaseDir, 'server.test.tpl'), join(destTest, 'server.test.ts'))])
         )
     )
     .then(() => {
