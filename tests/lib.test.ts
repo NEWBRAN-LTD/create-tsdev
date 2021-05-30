@@ -38,8 +38,8 @@ test(`Expect to able to get the right properties`, async t => {
 
 test(`Expect to fail if there is no package.json`, t => {
   const myTestFunc = () => changeAndGetPkg("/path/to/no/where")
-
   const err = t.throws<CustomError>(myTestFunc)
+
   t.is(err.parent.name, 'TypeError')
 })
 
@@ -53,12 +53,9 @@ test(`Expect to copy over the necessary properties to the package.json`, t => {
 })
 
 
-test.only(`Expect to copy over the required tpl files`, async t => {
+test(`Expect to copy over the required tpl files`, async t => {
   // move into the tmp directory as pwd
   process.chdir(tmp)
-
-  console.log(tmp)
-
   await setupTpl({})
 
   t.true(existsSync(join(tmp, 'clean.js')))
