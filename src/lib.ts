@@ -101,8 +101,6 @@ export function copyProps(pkg: any): any {
   return pkg
 }
 
-
-
 /**
  * Execute a npm install if they didn't supply the --noInstall
  * @param {object} args from command line

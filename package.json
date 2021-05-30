@@ -12,6 +12,7 @@
   "scripts": {
     "test": "ava",
     "test:lib": "ava ./tests/lib.test.ts",
+    "test:koa": "ava ./tests/koa.test.ts",
     "cli": "node ./index.js",
     "lint": "tslint --project tsconfig.json --format stylish",
     "build": "tsc -p tsconfig.json",

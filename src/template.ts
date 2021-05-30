@@ -53,13 +53,14 @@ function getDest(): any {
  * @return {Promise<any>} should be just true / false
  */
 async function koa(withDb: string = 'none'): Promise<any> {
-
   const { destRoot, destPkgJson } = getDest()
 
   // first copy the taget files
   return Promise.all(
       koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, tpl)))
-        .concat(configTpl.map(tpl => copy(join(koaBaseDir, tpl), destRoot)))
+        .concat(
+          configTpl.map(tpl => copy(join(koaBaseDir, tpl), destRoot))
+        )
     )
     .then(() => {
       // next read the npm.json
@@ -73,10 +74,12 @@ async function koa(withDb: string = 'none'): Promise<any> {
         .then(() => npmJson)
     })
     .then(npmJson => {
-      // finally run the install
-      return Promise.all(
-        npmJson.npm.map(cmd => execp(`npm ${cmd}`, destRoot))
-      )
+      if (process.env.NODE_ENV !== 'test') {
+        // finally run the install
+        return Promise.all(
+          npmJson.npm.map(cmd => execp(`npm ${cmd}`, destRoot))
+        )
+      }
     })
 }
 
