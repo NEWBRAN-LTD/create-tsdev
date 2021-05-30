@@ -4,8 +4,12 @@ import { superkoa } from 'superkoa'
 import app from '../src/app.ts'
 
 
-test(`It should able to connect to the koa server`, async t => {
-  const conn = await superkoa(app)
-  // @TODO 
-  t.pass()
+test.cb(`It should able to connect to the koa server`, t => {
+  superkoa(app)
+    .get("/")
+    .expect(200, function (err, res) {
+
+      t.is(res.text, 'Hello world', 'res.text == Hello world')
+      t.end()
+    })
 })
