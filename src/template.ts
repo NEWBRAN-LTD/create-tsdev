@@ -84,11 +84,11 @@ async function koa(args: any): Promise<any> {
       if (process.env.NODE_ENV !== 'test') {
         // finally run the install
         return Promise.all(
-          npmJson.npm.map(cmd => execp(`npm ${cmd}`, destRoot))
-        )
+          npmJson.npm.map((cmd: string) => execp(`npm ${cmd}`, destRoot))
+        ).then(() => args)
       }
+      return args
     })
-    .then(() => args)
 }
 
 /**
