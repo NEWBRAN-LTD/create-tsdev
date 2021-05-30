@@ -13,7 +13,7 @@
     "test": "ava",
     "test:dist": "ava ./tests/dist.test.js",
     "cli": "node ./index.js",
-    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "lint": "tslint --project tsconfig.json --format stylish",
     "build": "tsc -p tsconfig.json",
     "clean": "node ./clean.js",
     "ts-node": "ts-node",
