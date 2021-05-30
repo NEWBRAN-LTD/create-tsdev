@@ -117,18 +117,15 @@ async function processBaseTemplate(args: any): Promise<any> {
  */
 async function createTemplate(args: any): Promise<any> {
   const { tpl } = args
-  if (tpl === CLI_NAME) {
-    return Promise.resolve(args)
-  }
+
   switch (tpl) {
     case 'koa':
         args.skipInstall = true // make sure the final install not going to happen
+
         return koa(args)
-      break;
     case 'aws':
     default:
-        return Promise.reject(`No such template ${name}`)
-      break;
+      return Promise.resolve(args)
   }
 }
 
