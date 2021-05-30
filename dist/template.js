@@ -82,12 +82,11 @@ function processBaseTemplate(args) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const { destRoot, destSrc, destTest } = getDest();
         // this will get copy over no matter what
-        const files = [
-            [path_1.join(appRoot, 'clean.js'), path_1.join(destRoot, 'clean.js')]
-        ];
+        const files = constants_1.BASE_FILES.map(file => [path_1.join(appRoot, file), path_1.join(destRoot, file)]);
         // from here we need to change if the user use --tpl koa|aws
         // we combine the tpl here and not using the skipInstall anymore
         if (args.tpl === constants_1.CLI_NAME && !fs_extra_1.existsSync(destSrc)) {
+            console.log(`Install cli template`);
             files.push([path_1.join(cliBaseDir, 'main.tpl'), path_1.join(destSrc, 'main.ts')], [path_1.join(cliBaseDir, 'main.test.tpl'), path_1.join(destTest, 'main.test.ts')]);
         }
         return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.copy, null, fileTodo)))
@@ -106,6 +105,7 @@ function createTemplate(args) {
         const { tpl } = args;
         switch (tpl) {
             case 'koa':
+                console.log(`Install koa template`);
                 args.skipInstall = true; // make sure the final install not going to happen
                 return koa(args);
             case 'aws':

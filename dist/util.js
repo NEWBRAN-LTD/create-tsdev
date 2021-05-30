@@ -1,11 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.execp = exports.overwritePkgJson = exports.checkExist = exports.removeTpl = void 0;
+exports.execp = exports.overwritePkgJson = exports.checkExist = exports.removeTpl = exports.banner = void 0;
 const tslib_1 = require("tslib");
 // src/util.ts
 const fs_extra_1 = require("fs-extra");
+const path_1 = require("path");
 const child_process_1 = require("child_process");
 const constants_1 = require("./constants");
+/**
+ * just show a banner with version
+ */
+function banner() {
+    const pkg = fs_extra_1.readJsonSync(path_1.join(__dirname, '..', constants_1.PKG_FILE));
+    console.log(`Starting ${pkg.name}@${pkg.version}`);
+}
+exports.banner = banner;
 /**
  * Take the tpl ext off from path
  * @param {string} tpl

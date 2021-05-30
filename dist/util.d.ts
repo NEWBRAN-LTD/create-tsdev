@@ -1,4 +1,8 @@
 /**
+ * just show a banner with version
+ */
+export declare function banner(): void;
+/**
  * Take the tpl ext off from path
  * @param {string} tpl
  * @return {string}

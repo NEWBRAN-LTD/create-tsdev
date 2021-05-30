@@ -6,8 +6,8 @@ import {
   runInstall,
   installAction
 } from './lib'
-import { overwritePkgJson } from './util'
-import { setupTpl, banner } from './template'
+import { overwritePkgJson, banner } from './util'
+import { setupTpl } from './template'
 
 /**
  * Top level API

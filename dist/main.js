@@ -14,6 +14,7 @@ const template_1 = require("./template");
  */
 function main(_args) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        util_1.banner();
         // there is no point of accepting input anyway
         return lib_1.processArg(_args)
             .then(args => {
