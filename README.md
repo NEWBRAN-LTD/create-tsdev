@@ -23,7 +23,10 @@ Please note you need to init your project before you can use this tool.
 - `--to /where/your/project/root`: By default it will init the TS dev env inside your project root. Or you can pass `--to /where/your/project/root`. So it will switch over to that folder.
 - `--skipInstall`: it won't run the `npm install` in the end.
 - `--action`: options are `github` (will add `github.yml` template) or `gitlab` (will add `gitlab.yml`)
-- `--skipTpl`: If there is no `src` folder in your project root. Then it will create some template files (as well as a tests directory with a test file in it). If you pass this option then it will skip this step entirely.
+- `--tpl`: This is a breaking change since v0.6.x, you have to specify what template you want to use  
+
+  * `cli`: (`--tpl cli`) If there is no `src` folder in your project root. Then it will create some template files (as well as a tests directory with a test file in it). If you pass this option then it will skip this step entirely.
+  * `koa`: (`--tpl koa`) this will set up code and templates for a Koa based project.
 
 ## Credits
 

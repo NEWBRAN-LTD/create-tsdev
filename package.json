@@ -1,6 +1,6 @@
 {
   "name": "create-tsdev",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
   "files": [
