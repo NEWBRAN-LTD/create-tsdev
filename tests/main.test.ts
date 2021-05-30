@@ -23,7 +23,7 @@ test.after(() => {
 
 
 test(`End to end test`, async t => {
-  const res = await main({ to, action })
+  const res = await main({ to, action, tpl: 'cli' })
 
   t.true(res)
   t.true(existsSync(pkgFile))
@@ -44,7 +44,7 @@ test(`End to end test`, async t => {
   t.truthy(readFileSync(ymlFile) , 'Check to see if the action file got copy')
 
   // next check if there is template files
-  t.true(existsSync(join(to, 'src', 'main.ts')))
-  t.true(existsSync(join(to, 'tests', 'main.test.ts')))
+  t.true(existsSync(join(to, 'src', 'main.ts')), 'If there is a main.ts file')
+  t.true(existsSync(join(to, 'tests', 'main.test.ts')), 'if there is a main.test.ts file')
 
 })

@@ -1,6 +1,6 @@
 // src/template.ts
 import { resolve, join } from 'path'
-import { copy, ensureDir, readJsonSync, writeJson } from 'fs-extra'
+import { copy, ensureDir, readJsonSync, writeJson, existsSync } from 'fs-extra'
 import { execp, overwritePkgJson } from './util'
 
 import {

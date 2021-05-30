@@ -10,7 +10,6 @@ import {
 } from '../src/lib'
 import { setupTpl } from '../src/template'
 
-
 const fixtures: string = join(__dirname, 'fixtures')
 const pkgTpl: string = join(fixtures, 'package-tpl.json')
 const dest: string = join(fixtures, 'package.json' )
