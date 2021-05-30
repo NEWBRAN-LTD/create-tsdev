@@ -9,7 +9,7 @@ import { ACTION_MAP } from '../src/constants'
 import { main } from '../src/main'
 
 const from = join(__dirname, 'fixtures', 'package-tpl.json')
-const to = join(__dirname, 'tmp')
+const to = join(__dirname, 'tmp-koa')
 const pkgFile = join(to, 'package.json')
 const action = 'gitlab'
 

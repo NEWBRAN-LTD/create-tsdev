@@ -10,6 +10,8 @@ const fixtures = join(__dirname, 'fixtures')
 const to = join(fixtures, 'tmp-2')
 
 test.before(() => {
+  removeSync(to)
+
   copySync(join(fixtures, 'package-tpl.json'), join(to , 'package.json'))
 })
 
@@ -18,7 +20,7 @@ test.after(() => {
 })
 
 test(`Dist build file test`, t => {
-  return main({ to })
+  return main({ to, tpl: 'cli' })
     .then(() => {
       t.true(existsSync(join(to, 'clean.js')))
       t.true(existsSync(join(to, 'src', 'main.ts')))
