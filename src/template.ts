@@ -49,17 +49,17 @@ function getDest(): any {
 /**
  * handle the koa template
  * @TODO this should turn into a factory method for all the different templates
- * @param {string} [withDb='none'] for future development if they want db template or not
+ * @param {object} args for future development if they want db template or not
  * @return {Promise<any>} should be just true / false
  */
-async function koa(withDb: string = 'none'): Promise<any> {
-  const { destRoot, destPkgJson } = getDest()
+async function koa(args: any): Promise<any> {
+  const { destRoot, destSrc, destTest, destPkgJson } = getDest()
 
   // first copy the taget files
   return Promise.all(
       koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, tpl)))
         .concat(
-          configTpl.map(tpl => copy(join(koaBaseDir, tpl), destRoot))
+          configTpl.map(tpl => copy(join(koaBaseDir, tpl), join(destRoot, tpl)))
         )
     )
     .then(() => {
@@ -81,6 +81,7 @@ async function koa(withDb: string = 'none'): Promise<any> {
         )
       }
     })
+    .then(() => args)
 }
 
 /**
