@@ -6,7 +6,8 @@ import { execp, overwritePkgJson, removeTpl } from './util'
 import {
   PKG_FILE,
   CLI_NAME,
-  BASE_FILES
+  BASE_FILES,
+  SETTING_FILES
 } from './constants'
 // this is potentially a problem because it sets here
 // but when call the chdir it didn't change it
@@ -93,6 +94,22 @@ async function koa(args: any): Promise<any> {
 }
 
 /**
+ * prepare all the required based files
+ * @param {string} appRoot org
+ * @param {string} destRoot dest
+ * @return {Array<*>}
+ */
+function getBaseCopyFiles(appRoot: string, destRoot: string): Array<any> {
+  
+  return BASE_FILES.map(file => [join(appRoot, file), join(destRoot, file)])
+    .concat(SETTING_FILES.map( ([org, dest]) =>  [
+        join(baseDir, org), join(destRoot, dest)
+    ]))
+}
+
+
+
+/**
  * To create some start-up template or not
  * 1. If skipTpl === true then no
  * 2. If they already have a ./src folder then no
@@ -102,7 +119,9 @@ async function koa(args: any): Promise<any> {
 async function processBaseTemplate(args: any): Promise<any> {
   const { destRoot, destSrc, destTest } = getDest()
   // this will get copy over no matter what
-  const files = BASE_FILES.map(file => [join(appRoot, file), join(destRoot, file)])
+  const files = getBaseCopyFiles(appRoot, destRoot)
+  // v0.6.4 need to handle these files differently
+
 
   // from here we need to change if the user use --tpl koa|aws
   // we combine the tpl here and not using the skipInstall anymore
