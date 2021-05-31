@@ -65,7 +65,10 @@ function koa(args) {
             .then(npmJson => {
             if (process.env.NODE_ENV !== 'test') {
                 // finally run the install
-                return Promise.all(npmJson.npm.map((cmd) => util_1.execp(`npm ${cmd}`, destRoot))).then(() => args);
+                return Promise.all(npmJson.npm.map((cmd) => {
+                    console.log('Running: ', `npm ${cmd}`);
+                    return util_1.execp(`npm ${cmd}`, destRoot);
+                })).then(() => args);
             }
             return args;
         });

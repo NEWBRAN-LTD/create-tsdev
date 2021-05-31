@@ -86,7 +86,10 @@ async function koa(args: any): Promise<any> {
       if (process.env.NODE_ENV !== 'test') {
         // finally run the install
         return Promise.all(
-          npmJson.npm.map((cmd: string) => execp(`npm ${cmd}`, destRoot))
+          npmJson.npm.map((cmd: string) => {
+            console.log('Running: ', `npm ${cmd}`)
+            return execp(`npm ${cmd}`, destRoot)
+          })
         ).then(() => args)
       }
       return args
@@ -100,7 +103,7 @@ async function koa(args: any): Promise<any> {
  * @return {Array<*>}
  */
 function getBaseCopyFiles(appRoot: string, destRoot: string): Array<any> {
-  
+
   return BASE_FILES.map(file => [join(appRoot, file), join(destRoot, file)])
     .concat(SETTING_FILES.map( ([org, dest]) =>  [
         join(baseDir, org), join(destRoot, dest)
