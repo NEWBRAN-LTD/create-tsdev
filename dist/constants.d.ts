@@ -7,6 +7,7 @@ export declare const ACTIONS: Array<string>;
 export declare const TEMPLATES: Array<string>;
 export declare const TARGET_KEYS: Array<string>;
 export declare const BASE_FILES: Array<string>;
+export declare const SETTING_FILES: Array<any>;
 export declare const ACTION_MAP: any;
 export declare const YML_EXT = "yml";
 export declare const TPL_EXT = ".tpl";

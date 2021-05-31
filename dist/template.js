@@ -72,6 +72,18 @@ function koa(args) {
     });
 }
 /**
+ * prepare all the required based files
+ * @param {string} appRoot org
+ * @param {string} destRoot dest
+ * @return {Array<*>}
+ */
+function getBaseCopyFiles(appRoot, destRoot) {
+    return constants_1.BASE_FILES.map(file => [path_1.join(appRoot, file), path_1.join(destRoot, file)])
+        .concat(constants_1.SETTING_FILES.map(([org, dest]) => [
+        path_1.join(baseDir, org), path_1.join(destRoot, dest)
+    ]));
+}
+/**
  * To create some start-up template or not
  * 1. If skipTpl === true then no
  * 2. If they already have a ./src folder then no
@@ -82,7 +94,8 @@ function processBaseTemplate(args) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const { destRoot, destSrc, destTest } = getDest();
         // this will get copy over no matter what
-        const files = constants_1.BASE_FILES.map(file => [path_1.join(appRoot, file), path_1.join(destRoot, file)]);
+        const files = getBaseCopyFiles(appRoot, destRoot);
+        // v0.6.4 need to handle these files differently
         // from here we need to change if the user use --tpl koa|aws
         // we combine the tpl here and not using the skipInstall anymore
         if (args.tpl === constants_1.CLI_NAME && !fs_extra_1.existsSync(destSrc)) {
