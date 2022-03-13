@@ -1,6 +1,6 @@
 {
   "name": "create-tsdev",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Using npx to generate a TS dev env",
   "main": "index.js",
   "files": [
@@ -24,11 +24,12 @@
     "esbuild-node:dev": "esbuild src/main.ts --bundle --sourcemap=external --outfile=dist/cli.js",
     "esbuild-node:watch": "esbuild src/main.ts --bundle --watch --sourcemap=external --outfile=dist/cli.js",
     "prepublishOnly": "npm run test && npm run build-all",
-    "copy-test": "node ./tests/fixtures/copy.js"
+    "copy-test": "node ./tests/fixtures/copy.js",
+    "push": "git push origin master && git push gh main"
   },
   "repository": {
     "type": "git",
-    "url": "git@gitee.com:NEWBRAN/create-tsdev.git"
+    "url": "git@github.com:NEWBRAN-LTD/create-tsdev.git"
   },
   "keywords": [
     "Node",
