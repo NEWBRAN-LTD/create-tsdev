@@ -6,6 +6,8 @@ import { execp, overwritePkgJson, removeTpl } from './util'
 import {
   PKG_FILE,
   CLI_NAME,
+  TPL_NAME,
+  KOA_NAME,
   BASE_FILES,
   SETTING_FILES
 } from './constants'
@@ -13,11 +15,11 @@ import {
 // but when call the chdir it didn't change it
 
 
-const baseDir = resolve(__dirname, 'tpl')
+const baseDir = resolve(__dirname, TPL_NAME)
 const appRoot = resolve(__dirname, '..')
 
-const cliBaseDir: string = join(baseDir, 'cli')
-const koaBaseDir: string = join(baseDir, 'koa')
+const cliBaseDir: string = join(baseDir, CLI_NAME)
+const koaBaseDir: string = join(baseDir, KOA_NAME)
 // const awsBaseDir: string = join(baseDir, 'aws')
 
 const koaTemplates: Array<string> = [
@@ -69,18 +71,17 @@ async function koa(args: any): Promise<any> {
             )
         )
     )
-    .then(() => {
+    .then(async () => {
       // next read the npm.json
       const npmJson = readJsonSync(join(koaBaseDir, npmTodo))
       // update the root package.json
       const pkgJson = readJsonSync(destPkgJson)
       // just overwrite it
       pkgJson.scripts = Object.assign(pkgJson.scripts, npmJson.scripts)
+      // change from a promise callback
+      await overwritePkgJson(destPkgJson, pkgJson)
 
-      return overwritePkgJson(destPkgJson, pkgJson)
-        .then(
-          () => npmJson
-        )
+      return npmJson
     })
     .then(npmJson => {
       if (process.env.NODE_ENV !== 'test') {
@@ -110,8 +111,6 @@ function getBaseCopyFiles(appRoot: string, destRoot: string): Array<any> {
     ]))
 }
 
-
-
 /**
  * To create some start-up template or not
  * 1. If skipTpl === true then no
@@ -124,7 +123,6 @@ async function processBaseTemplate(args: any): Promise<any> {
   // this will get copy over no matter what
   const files = getBaseCopyFiles(appRoot, destRoot)
   // v0.6.4 need to handle these files differently
-
 
   // from here we need to change if the user use --tpl koa|aws
   // we combine the tpl here and not using the skipInstall anymore
@@ -169,8 +167,8 @@ async function createTemplate(args: any): Promise<any> {
  * @param {object} args from the command line options
  * @return {Promise<any>}
  */
-export function setupTpl(args: any): Promise<any> {
+export async function setupTpl(args: any): Promise<any> {
 
   return processBaseTemplate(args)
-    .then(args => createTemplate(args))
+    .then(createTemplate)
 }
