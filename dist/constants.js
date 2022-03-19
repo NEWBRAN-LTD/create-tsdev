@@ -19,7 +19,8 @@ exports.BASE_FILES = ['clean.js'];
 // these files were not part of the npm, therefore need to handle it differently
 exports.SETTING_FILES = [
     ['gitignore.tpl', '.gitignore'],
-    ['eslintrc.tpl', '.eslintrc.js']
+    ['eslintrc.tpl', '.eslintrc.js'],
+    ['tsconfig.tpl', 'tsconfig.json']
 ];
 exports.ACTION_MAP = {
     github: ".github/workflows/lint-and-test.yml",

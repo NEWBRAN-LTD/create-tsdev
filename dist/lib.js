@@ -111,6 +111,7 @@ function runInstall(args) {
     if (args.install && process.env.NODE_ENV !== 'test') {
         // new in 0.8.0 they can specify which package manager to run the install
         const cmd = `${args.install} install`;
+        console.log(`Run --> ${cmd}`);
         return util_1.execp(cmd, process.cwd());
     }
     return Promise.resolve(true);

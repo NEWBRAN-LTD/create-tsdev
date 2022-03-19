@@ -58,7 +58,7 @@ function koa(args) {
             if (process.env.NODE_ENV !== 'test') {
                 // finally run the install - this should be for Koa template ONLY
                 // this is wrong if the user didn't select the --install option!
-                // @BUG @TODO 
+                // @BUG @TODO
                 return Promise.all(npmJson.npm.map((cmd) => {
                     console.log('Running: ', `npm ${cmd}`);
                     return util_1.execp(`npm ${cmd}`, destRoot);
