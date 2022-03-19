@@ -2,16 +2,16 @@
 import test from 'ava'
 
 import { removeSync, copySync, readJsonSync } from 'fs-extra'
-import { existsSync, readFileSync } from 'fs'
+import { existsSync } from 'fs'
 import { join } from 'path'
 
-import { ACTION_MAP } from '../src/constants'
 import { main } from '../src/main'
-
 const from = join(__dirname, 'fixtures', 'package-tpl.json')
 const to = join(__dirname, 'tmp-koa')
 const pkgFile = join(to, 'package.json')
-const action = 'gitlab'
+// @TODO add import { readFileSync } from 'fs'
+// import { ACTION_MAP } from '../src/constants'
+// const action = 'gitlab'
 
 test.before(() => {
   // clean up first

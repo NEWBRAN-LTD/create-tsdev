@@ -5,6 +5,13 @@ export const ACTION_NAME: string = 'action'
 export const TPL_NAME: string = 'tpl'
 export const CLI_NAME: string = 'cli'
 export const KOA_NAME: string = 'koa'
+
+export const NPM_NAME: string = 'npm'
+export const PNPM_NAME: string = 'pnpm'
+export const YARN_NAME: string = 'yarn'
+
+export const PACKAGE_MANAGERS: Array<string> = [NPM_NAME, PNPM_NAME, YARN_NAME]
+
 export const PKG_FILE: string = 'package.json'
 
 export const ACTIONS: Array<string> = ['github', 'gitlab']
@@ -22,6 +29,7 @@ export const ACTION_MAP: any = {
 }
 export const YML_EXT = 'yml'
 export const TPL_EXT = '.tpl'
+export const TS_EXT = '.ts'
 
 export const DEFAULT_OPTIONS = {
   to: PLACEHOLDER,
@@ -29,6 +37,11 @@ export const DEFAULT_OPTIONS = {
   action: PLACEHOLDER,
   tpl: CLI_NAME
 }
+
+export const CLI_TPLS: Array<string> = [
+  'main.tpl',
+  'main.test.tpl'
+]
 
 export const KOA_TPLS: Array<string> = [
   'app.ts.tpl',
@@ -42,8 +55,7 @@ export const TEST_TPLS: Array<string> = [
   'server.test.ts.tpl'
 ]
 
-const npmTodo: string = 'npm.json'
-
+export const NPM_TODO: string = 'npm.json'
 
 // taking off your trousers to fart
 type configObjType = {

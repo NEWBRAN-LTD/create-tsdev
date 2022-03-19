@@ -19,11 +19,29 @@ import {
   TPL_NAME,
   CLI_NAME,
   TEMPLATES,
+  NPM_NAME,
+  PACKAGE_MANAGERS,
   configObjType
 } from './constants'
 import { execp, checkExist } from './util'
 // re-export
 export { CustomError }
+
+/**
+ * get the --install option, and provide default value 
+ * @param {array} arg -- process.argv
+ * @return {any} modified arg
+ */
+export function processInstallName(args: any): any {
+  const arg = args.install
+  if (arg) {
+    if (arg === true || !checkExist(PACKAGE_MANAGERS, arg)) {
+      args.install = NPM_NAME
+    }
+  }
+
+  return args
+}
 
 /**
  * processing the command line input
@@ -32,6 +50,7 @@ export { CustomError }
  */
 export async function processArg(argv: any): Promise<configObjType> {
   return Promise.resolve(argv)
+    .then(processInstallName)
     .then(args => {
       const keys = Object.keys(DEFAULT_OPTIONS)
 
@@ -115,7 +134,7 @@ export function runInstall(args: any): Promise<any> {
   if (args.install && process.env.NODE_ENV !== 'test') {
     // new in 0.8.0 they can specify which package manager to run the install
     const cmd = `${args.install} install`
-    
+
     return execp(cmd, process.cwd())
   }
 

@@ -8,3 +8,6 @@ main(args)
   .then(() => {
     console.log(`All setup, you can get to work`)
   })
+  .catch(e => {
+    console.error(`Sorry couldn't complete the setup due to`, e)
+  })

@@ -12,20 +12,20 @@ import {
   SETTING_FILES,
   KOA_TPLS,
   CONFIG_TPLS,
-  TEST_TPLS
+  TEST_TPLS,
+  NPM_TODO,
+  TPL_EXT,
+  TS_EXT,
+  CLI_TPLS
 } from './constants'
 // this is potentially a problem because it sets here
 // but when call the chdir it didn't change it
-
-
 const baseDir = resolve(__dirname, TPL_NAME)
 const appRoot = resolve(__dirname, '..')
 
 const cliBaseDir: string = join(baseDir, CLI_NAME)
 const koaBaseDir: string = join(baseDir, KOA_NAME)
 // const awsBaseDir: string = join(baseDir, 'aws')
-
-const npmTodo: string = 'npm.json'
 
 /**
  * bit of hack to get the path where we wanted
@@ -63,11 +63,11 @@ async function koa(args: any): Promise<any> {
         )
     )
     .then(async () => {
-      // next read the npm.json
-      const npmJson = readJsonSync(join(koaBaseDir, npmTodo))
-      // update the root package.json
+      // next read the npm.json - should check if this exist
+      const npmJsonDest = join(koaBaseDir, NPM_TODO)
+      const npmJson = existsSync(npmJsonDest) ? readJsonSync(npmJsonDest) : {}
       const pkgJson = readJsonSync(destPkgJson)
-      // just overwrite it
+      // update the root package.json, just overwrite it
       pkgJson.scripts = Object.assign(pkgJson.scripts, npmJson.scripts)
       // change from a promise callback
       await overwritePkgJson(destPkgJson, pkgJson)
@@ -75,8 +75,13 @@ async function koa(args: any): Promise<any> {
       return npmJson
     })
     .then(npmJson => {
+      // this npm.json store some of our pre-defined options
+      // console.log('npmJson', npmJson)
+      // is this wrong?
       if (process.env.NODE_ENV !== 'test') {
-        // finally run the install
+        // finally run the install - this should be for Koa template ONLY
+        // this is wrong if the user didn't select the --install option!
+        // @BUG @TODO 
         return Promise.all(
           npmJson.npm.map((cmd: string) => {
             console.log('Running: ', `npm ${cmd}`)
@@ -119,9 +124,10 @@ async function processBaseTemplate(args: any): Promise<any> {
   // we combine the tpl here and not using the skipInstall anymore
   if (args.tpl === CLI_NAME && !existsSync(destSrc)) {
     console.log(`Install cli template`)
+    // this is really ugly!
     files.push(
-      [join(cliBaseDir, 'main.tpl'), join(destSrc ,'main.ts')],
-      [join(cliBaseDir, 'main.test.tpl'), join(destTest, 'main.test.ts')]
+      [join(cliBaseDir, CLI_TPLS[0]), join(destSrc , CLI_TPLS[0].replace(TPL_EXT, TS_EXT))],
+      [join(cliBaseDir, CLI_TPLS[1]), join(destTest, CLI_TPLS[1].replace(TPL_EXT, TS_EXT))]
     )
   }
 
