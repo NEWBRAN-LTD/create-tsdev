@@ -9,23 +9,11 @@ const util_1 = require("./util");
 const constants_1 = require("./constants");
 // this is potentially a problem because it sets here
 // but when call the chdir it didn't change it
-const baseDir = path_1.resolve(__dirname, 'tpl');
+const baseDir = path_1.resolve(__dirname, constants_1.TPL_NAME);
 const appRoot = path_1.resolve(__dirname, '..');
-const cliBaseDir = path_1.join(baseDir, 'cli');
-const koaBaseDir = path_1.join(baseDir, 'koa');
+const cliBaseDir = path_1.join(baseDir, constants_1.CLI_NAME);
+const koaBaseDir = path_1.join(baseDir, constants_1.KOA_NAME);
 // const awsBaseDir: string = join(baseDir, 'aws')
-const koaTemplates = [
-    'app.ts.tpl',
-    'server.ts.tpl',
-    'router.ts.tpl'
-];
-const configTpl = [
-    'tsconfig.json'
-];
-const testTpl = [
-    'server.test.ts.tpl'
-];
-const npmTodo = 'npm.json';
 /**
  * bit of hack to get the path where we wanted
  * @return {*} key value
@@ -49,22 +37,28 @@ function koa(args) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const { destRoot, destSrc, destTest, destPkgJson } = getDest();
         // first copy the taget files
-        return Promise.all(koaTemplates.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destSrc, util_1.removeTpl(tpl))))
-            .concat(configTpl.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destRoot, util_1.removeTpl(tpl))))
-            .concat(testTpl.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destTest, util_1.removeTpl(tpl)))))))
-            .then(() => {
-            // next read the npm.json
-            const npmJson = fs_extra_1.readJsonSync(path_1.join(koaBaseDir, npmTodo));
-            // update the root package.json
+        return Promise.all(constants_1.KOA_TPLS.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destSrc, util_1.removeTpl(tpl))))
+            .concat(constants_1.CONFIG_TPLS.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destRoot, util_1.removeTpl(tpl))))
+            .concat(constants_1.TEST_TPLS.map(tpl => fs_extra_1.copy(path_1.join(koaBaseDir, tpl), path_1.join(destTest, util_1.removeTpl(tpl)))))))
+            .then(() => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            // next read the npm.json - should check if this exist
+            const npmJsonDest = path_1.join(koaBaseDir, constants_1.NPM_TODO);
+            const npmJson = fs_extra_1.existsSync(npmJsonDest) ? fs_extra_1.readJsonSync(npmJsonDest) : {};
             const pkgJson = fs_extra_1.readJsonSync(destPkgJson);
-            // just overwrite it
+            // update the root package.json, just overwrite it
             pkgJson.scripts = Object.assign(pkgJson.scripts, npmJson.scripts);
-            return util_1.overwritePkgJson(destPkgJson, pkgJson)
-                .then(() => npmJson);
-        })
+            // change from a promise callback
+            yield util_1.overwritePkgJson(destPkgJson, pkgJson);
+            return npmJson;
+        }))
             .then(npmJson => {
+            // this npm.json store some of our pre-defined options
+            // console.log('npmJson', npmJson)
+            // is this wrong?
             if (process.env.NODE_ENV !== 'test') {
-                // finally run the install
+                // finally run the install - this should be for Koa template ONLY
+                // this is wrong if the user didn't select the --install option!
+                // @BUG @TODO 
                 return Promise.all(npmJson.npm.map((cmd) => {
                     console.log('Running: ', `npm ${cmd}`);
                     return util_1.execp(`npm ${cmd}`, destRoot);
@@ -103,7 +97,8 @@ function processBaseTemplate(args) {
         // we combine the tpl here and not using the skipInstall anymore
         if (args.tpl === constants_1.CLI_NAME && !fs_extra_1.existsSync(destSrc)) {
             console.log(`Install cli template`);
-            files.push([path_1.join(cliBaseDir, 'main.tpl'), path_1.join(destSrc, 'main.ts')], [path_1.join(cliBaseDir, 'main.test.tpl'), path_1.join(destTest, 'main.test.ts')]);
+            // this is really ugly!
+            files.push([path_1.join(cliBaseDir, constants_1.CLI_TPLS[0]), path_1.join(destSrc, constants_1.CLI_TPLS[0].replace(constants_1.TPL_EXT, constants_1.TS_EXT))], [path_1.join(cliBaseDir, constants_1.CLI_TPLS[1]), path_1.join(destTest, constants_1.CLI_TPLS[1].replace(constants_1.TPL_EXT, constants_1.TS_EXT))]);
         }
         return Promise.all(files.map(fileTodo => Reflect.apply(fs_extra_1.copy, null, fileTodo)))
             .then(() => args);
@@ -136,7 +131,9 @@ function createTemplate(args) {
  * @return {Promise<any>}
  */
 function setupTpl(args) {
-    return processBaseTemplate(args)
-        .then(args => createTemplate(args));
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return processBaseTemplate(args)
+            .then(createTemplate);
+    });
 }
 exports.setupTpl = setupTpl;

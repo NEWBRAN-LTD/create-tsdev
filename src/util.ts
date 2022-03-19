@@ -13,8 +13,6 @@ export function banner(): void {
   console.log(`Starting ${pkg.name}@${pkg.version}`)
 }
 
-
-
 /**
  * Take the tpl ext off from path
  * @param {string} tpl

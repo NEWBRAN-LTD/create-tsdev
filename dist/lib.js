@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.installAction = exports.runInstall = exports.copyProps = exports.changeAndGetPkg = exports.processArg = exports.CustomError = void 0;
+exports.installAction = exports.runInstall = exports.copyProps = exports.changeAndGetPkg = exports.processArg = exports.processInstallName = exports.CustomError = void 0;
 const tslib_1 = require("tslib");
 // lib.ts libraries of functions
 const path_1 = require("path");
@@ -10,6 +10,21 @@ Object.defineProperty(exports, "CustomError", { enumerable: true, get: function 
 const constants_1 = require("./constants");
 const util_1 = require("./util");
 /**
+ * get the --install option, and provide default value
+ * @param {array} arg -- process.argv
+ * @return {any} modified arg
+ */
+function processInstallName(args) {
+    const arg = args.install;
+    if (arg) {
+        if (arg === true || !util_1.checkExist(constants_1.PACKAGE_MANAGERS, arg)) {
+            args.install = constants_1.NPM_NAME;
+        }
+    }
+    return args;
+}
+exports.processInstallName = processInstallName;
+/**
  * processing the command line input
  * @param {array} arg -- process.argv
  * @return {promise} resolve <configObjType>
@@ -17,10 +32,16 @@ const util_1 = require("./util");
 function processArg(argv) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(argv)
+            .then(processInstallName)
             .then(args => {
             const keys = Object.keys(constants_1.DEFAULT_OPTIONS);
             return keys
                 .filter(key => {
+                // special case tpl if they didn't provide one then we put cli in it
+                if (key === constants_1.TPL_NAME && argv[key] === undefined) {
+                    argv[key] = constants_1.CLI_NAME;
+                }
+                // the rest of the check
                 const check = argv[key] !== undefined;
                 // need to check this one
                 if (check && key === constants_1.ACTION_NAME) {
@@ -87,8 +108,10 @@ exports.copyProps = copyProps;
  * @return {promise}
  */
 function runInstall(args) {
-    if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
-        return util_1.execp("npm install", process.cwd());
+    if (args.install && process.env.NODE_ENV !== 'test') {
+        // new in 0.8.0 they can specify which package manager to run the install
+        const cmd = `${args.install} install`;
+        return util_1.execp(cmd, process.cwd());
     }
     return Promise.resolve(true);
 }

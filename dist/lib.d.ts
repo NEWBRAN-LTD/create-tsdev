@@ -2,6 +2,12 @@ import { CustomError } from './custom-error';
 import { configObjType } from './constants';
 export { CustomError };
 /**
+ * get the --install option, and provide default value
+ * @param {array} arg -- process.argv
+ * @return {any} modified arg
+ */
+export declare function processInstallName(args: any): any;
+/**
  * processing the command line input
  * @param {array} arg -- process.argv
  * @return {promise} resolve <configObjType>
