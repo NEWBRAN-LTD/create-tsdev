@@ -28,7 +28,7 @@ import { execp, checkExist } from './util'
 export { CustomError }
 
 /**
- * get the --install option, and provide default value 
+ * get the --install option, and provide default value
  * @param {array} arg -- process.argv
  * @return {any} modified arg
  */
@@ -134,6 +134,7 @@ export function runInstall(args: any): Promise<any> {
   if (args.install && process.env.NODE_ENV !== 'test') {
     // new in 0.8.0 they can specify which package manager to run the install
     const cmd = `${args.install} install`
+    console.log(`Run --> ${cmd}`)
 
     return execp(cmd, process.cwd())
   }
