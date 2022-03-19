@@ -29,6 +29,22 @@ export const DEFAULT_OPTIONS = {
   action: PLACEHOLDER,
   tpl: CLI_NAME
 }
+
+export const KOA_TPLS: Array<string> = [
+  'app.ts.tpl',
+  'server.ts.tpl',
+  'router.ts.tpl'
+]
+export const CONFIG_TPLS: Array<string> = [
+  'tsconfig.json'
+]
+export const TEST_TPLS: Array<string> = [
+  'server.test.ts.tpl'
+]
+
+const npmTodo: string = 'npm.json'
+
+
 // taking off your trousers to fart
 type configObjType = {
   action?: string,

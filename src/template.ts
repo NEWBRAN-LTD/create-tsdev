@@ -9,7 +9,10 @@ import {
   TPL_NAME,
   KOA_NAME,
   BASE_FILES,
-  SETTING_FILES
+  SETTING_FILES,
+  KOA_TPLS,
+  CONFIG_TPLS,
+  TEST_TPLS
 } from './constants'
 // this is potentially a problem because it sets here
 // but when call the chdir it didn't change it
@@ -21,18 +24,6 @@ const appRoot = resolve(__dirname, '..')
 const cliBaseDir: string = join(baseDir, CLI_NAME)
 const koaBaseDir: string = join(baseDir, KOA_NAME)
 // const awsBaseDir: string = join(baseDir, 'aws')
-
-const koaTemplates: Array<string> = [
-  'app.ts.tpl',
-  'server.ts.tpl',
-  'router.ts.tpl'
-]
-const configTpl: Array<string> = [
-  'tsconfig.json'
-]
-const testTpl: Array<string> = [
-  'server.test.ts.tpl'
-]
 
 const npmTodo: string = 'npm.json'
 
@@ -63,11 +54,11 @@ async function koa(args: any): Promise<any> {
 
   // first copy the taget files
   return Promise.all(
-      koaTemplates.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, removeTpl(tpl) )))
+      KOA_TPLS.map(tpl => copy(join(koaBaseDir, tpl), join(destSrc, removeTpl(tpl) )))
         .concat(
-          configTpl.map(tpl => copy(join(koaBaseDir, tpl), join(destRoot, removeTpl(tpl)) ))
+          CONFIG_TPLS.map(tpl => copy(join(koaBaseDir, tpl), join(destRoot, removeTpl(tpl)) ))
             .concat(
-              testTpl.map(tpl => copy(join(koaBaseDir, tpl), join(destTest, removeTpl(tpl))))
+              TEST_TPLS.map(tpl => copy(join(koaBaseDir, tpl), join(destTest, removeTpl(tpl))))
             )
         )
     )
