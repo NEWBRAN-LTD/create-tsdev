@@ -27,7 +27,7 @@ export const DEFAULT_OPTIONS = {
   to: PLACEHOLDER,
   install: false, // change in 0.8.0
   action: PLACEHOLDER,
-  tpl: PLACEHOLDER
+  tpl: CLI_NAME
 }
 // taking off your trousers to fart
 type configObjType = {

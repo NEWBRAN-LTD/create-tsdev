@@ -149,7 +149,6 @@ async function processBaseTemplate(args: any): Promise<any> {
  */
 async function createTemplate(args: any): Promise<any> {
   const { tpl } = args
-
   switch (tpl) {
     case 'koa':
         console.log(`Install koa template`)

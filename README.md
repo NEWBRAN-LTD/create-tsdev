@@ -32,11 +32,9 @@ From 0.8.x, all the options are optional.
 - ~~`--skipInstall`: it won't run the `npm install` in the end.~~ (no longer install by default see below)
 - `--install [packageManager]` We don't run install from now on unless you specify the package manager (default: `npm`, support `pnpm`, `yard`)
 - `--action`: options are `github` (will add `github.yml` template) or `gitlab` (will add `gitlab.yml`)
-- `--tpl`: ~~This is a breaking change since v0.6.x, you have to specify what template you want to us~~ 0.8.x use a `basic` template by default
-  * `basic` (default) which will setup bare minimum, and you can expand from it.
-  * `cli`: (`--tpl cli`) If there is no `src` folder in your project root. Then it will create some template files (as well as a tests directory with a test file in it). If you pass this option then it will skip this step entirely.
+- `--tpl`: 0.8.x use `cli` template by default
+  * `cli`: (`--tpl cli` default) If there is no `src` folder in your project root. Then it will create some template files (as well as a tests directory with a test file in it). If you pass this option then it will skip this step entirely.
   * `koa`: (`--tpl koa`) this will set up code and templates for a Koa based project.
-  * `aws`: (`--tpl aws`) coming soon
 
 ## Credits
 

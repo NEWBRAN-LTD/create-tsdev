@@ -21,9 +21,8 @@ test.after(() => {
   removeSync(to)
 })
 
-
 test(`End to end test`, async t => {
-  const res = await main({ to, action, tpl: 'cli' })
+  const res = await main({ to, action })
 
   t.true(res)
   t.true(existsSync(pkgFile))

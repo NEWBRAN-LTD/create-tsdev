@@ -17,6 +17,7 @@ import {
   YML_EXT,
   DEFAULT_OPTIONS,
   TPL_NAME,
+  CLI_NAME,
   TEMPLATES,
   configObjType
 } from './constants'
@@ -36,6 +37,11 @@ export async function processArg(argv: any): Promise<configObjType> {
 
       return keys
         .filter(key => {
+          // special case tpl if they didn't provide one then we put cli in it
+          if (key === TPL_NAME && argv[key] === undefined) {
+            argv[key] = CLI_NAME
+          }
+          // the rest of the check
           const check = argv[key] !== undefined
           // need to check this one
           if (check && key === ACTION_NAME) {
@@ -106,9 +112,11 @@ export function copyProps(pkg: any): any {
  * @return {promise}
  */
 export function runInstall(args: any): Promise<any> {
-  if (args.skipInstall !== true && process.env.NODE_ENV !== 'test') {
-
-    return execp("npm install", process.cwd())
+  if (args.install && process.env.NODE_ENV !== 'test') {
+    // new in 0.8.0 they can specify which package manager to run the install
+    const cmd = `${args.install} install`
+    
+    return execp(cmd, process.cwd())
   }
 
   return Promise.resolve(true)
