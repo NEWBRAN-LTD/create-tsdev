@@ -21,7 +21,8 @@ export const BASE_FILES: Array<string> = ['clean.js']
 // these files were not part of the npm, therefore need to handle it differently
 export const SETTING_FILES: Array<any> = [
   ['gitignore.tpl', '.gitignore'],
-  ['eslintrc.tpl', '.eslintrc.js']
+  ['eslintrc.tpl', '.eslintrc.js'],
+  ['tsconfig.tpl', 'tsconfig.json']
 ]
 export const ACTION_MAP: any = {
   github: ".github/workflows/lint-and-test.yml",

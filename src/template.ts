@@ -42,7 +42,6 @@ function getDest(): any {
   }
 }
 
-
 /**
  * handle the koa template
  * @TODO this should turn into a factory method for all the different templates
@@ -81,7 +80,7 @@ async function koa(args: any): Promise<any> {
       if (process.env.NODE_ENV !== 'test') {
         // finally run the install - this should be for Koa template ONLY
         // this is wrong if the user didn't select the --install option!
-        // @BUG @TODO 
+        // @BUG @TODO
         return Promise.all(
           npmJson.npm.map((cmd: string) => {
             console.log('Running: ', `npm ${cmd}`)
